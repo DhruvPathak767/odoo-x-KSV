@@ -1,0 +1,76 @@
+<%- include('../partials/header') %>
+
+<div style="margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+    <div>
+        <h1 style="font-size: 2.2rem; margin-bottom: 0.5rem;">Supplier Directory</h1>
+        <p style="color: var(--color-text-secondary);">Browse, filter, and inspect verified vendor profiles on the network.</p>
+    </div>
+    <div style="display: flex; gap: 0.5rem; align-items: center;">
+        <span style="font-size: 0.8rem; color: var(--color-text-muted); margin-right: 0.25rem;">Export:</span>
+        <a href="/reports/export?entity=vendors&type=pdf" class="btn btn-secondary" style="padding: 0.55rem 0.8rem; font-size: 0.8rem; border-radius: 8px;">PDF</a>
+        <a href="/reports/export?entity=vendors&type=excel" class="btn btn-secondary" style="padding: 0.55rem 0.8rem; font-size: 0.8rem; border-radius: 8px;">Excel</a>
+        <a href="/reports/export?entity=vendors&type=csv" class="btn btn-secondary" style="padding: 0.55rem 0.8rem; font-size: 0.8rem; border-radius: 8px;">CSV</a>
+    </div>
+</div>
+
+<!-- Search and filters -->
+<div class="glass-card" style="padding: 1.25rem; margin-bottom: 2rem;">
+    <form method="GET" action="/procurement/vendors" style="display: flex; gap: 1rem; flex-wrap: wrap;">
+        <input type="text" name="search" class="form-control" placeholder="Search by name, company, GST..." value="<%= search %>" style="flex: 2; min-width: 250px;">
+        <select name="category" class="form-control" style="flex: 1; min-width: 150px;">
+            <option value="">All Categories</option>
+            <% categories.forEach(cat => { %>
+                <option value="<%= cat %>" <%= category === cat ? 'selected' : '' %>><%= cat %></option>
+            <% }) %>
+        </select>
+        <button type="submit" class="btn btn-primary" style="padding: 0.75rem 1.5rem;">Apply Filters</button>
+    </form>
+</div>
+
+<!-- Vendor List Grid/Table -->
+<div class="glass-card" style="padding: 2rem;">
+    <% if (vendors.length === 0) { %>
+        <p style="color: var(--color-text-muted); text-align: center; padding: 2rem 0;">No suppliers match the current criteria.</p>
+    <% } else { %>
+        <div style="overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.95rem;">
+                <thead>
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.08); color: var(--color-text-muted);">
+                        <th style="padding: 1rem 0.5rem;">Company Name</th>
+                        <th style="padding: 1rem 0.5rem;">GST / Tax Ref</th>
+                        <th style="padding: 1rem 0.5rem;">Contact Person</th>
+                        <th style="padding: 1rem 0.5rem;">Category</th>
+                        <th style="padding: 1rem 0.5rem;">Phone</th>
+                        <th style="padding: 1rem 0.5rem;">Location</th>
+                        <th style="padding: 1rem 0.5rem; text-align: center;">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% vendors.forEach(v => { %>
+                        <tr style="border-bottom: 1px solid rgba(255,255,255,0.03);">
+                            <td style="padding: 1rem 0.5rem;">
+                                <strong style="color: #ffffff;"><%= v.company_name %></strong>
+                                <span style="display: block; font-size: 0.75rem; color: var(--color-text-muted);"><%= v.website %></span>
+                            </td>
+                            <td style="padding: 1rem 0.5rem; font-family: monospace; font-weight: bold;"><%= v.gst_number %></td>
+                            <td style="padding: 1rem 0.5rem;">
+                                <%= v.contact_person %>
+                                <span style="display: block; font-size: 0.75rem; color: var(--color-text-muted);"><%= v.email %></span>
+                            </td>
+                            <td style="padding: 1rem 0.5rem;"><%= v.category %></td>
+                            <td style="padding: 1rem 0.5rem; font-family: monospace;"><%= v.phone %></td>
+                            <td style="padding: 1rem 0.5rem;"><%= v.city %>, <%= v.country %></td>
+                            <td style="padding: 1rem 0.5rem; text-align: center;">
+                                <span class="module-status-pill <%= v.status === 'Approved' ? 'status-active-badge' : 'status-upcoming' %>" style="margin-top: 0; font-size: 0.65rem;">
+                                    <%= v.status %>
+                                </span>
+                            </td>
+                        </tr>
+                    <% }) %>
+                </tbody>
+            </table>
+        </div>
+    <% } %>
+</div>
+
+<%- include('../partials/footer') %>

@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title || 'VendorBridge ERP' %></title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- Main Stylesheet -->
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <!-- Premium Noise & Spotlight overlays -->
+    <div class="noise-overlay"></div>
+    <div class="global-spotlight"></div>
+
+    <!-- Background Particle Canvas -->
+    <canvas id="particles-canvas"></canvas>
+
+    <!-- Background Glow Orbs wrapper to prevent scroll overflow -->
+    <div class="glow-orbs-wrapper" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden; pointer-events: none; z-index: 0;">
+        <div class="glow-orb glow-orb-1"></div>
+        <div class="glow-orb glow-orb-2"></div>
+        <div class="glow-orb glow-orb-3"></div>
+    </div>
+
+    <!-- HEADER / NAVIGATION -->
+    <header class="navbar scrolled" id="navbar">
+        <div class="nav-container">
+            <a href="/dashboard" class="logo-group" id="nav-logo">
+                <svg class="logo-icon" width="36" height="36" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="logo-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#ec4899" />
+                            <stop offset="100%" stop-color="#6366f1" />
+                        </linearGradient>
+                    </defs>
+                    <path d="M20 70 L40 30 L60 30 L80 70" stroke="url(#logo-grad)" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M30 55 L70 55" stroke="#ec4899" stroke-width="8" stroke-linecap="round"/>
+                    <circle cx="50" cy="30" r="8" fill="#ec4899" class="logo-dot" />
+                </svg>
+                <span class="logo-text">Vendor<span>Bridge</span></span>
+            </a>
+
+            <!-- Dynamic navigation menus based on role -->
+            <nav class="nav-menu" id="nav-menu">
+                <% if (locals.user) { %>
+                    <% if (locals.user.role === 'vendor') { %>
+                        <a href="/vendor/dashboard" class="nav-link">Dashboard</a>
+                        <a href="/vendor/rfqs" class="nav-link">Assigned RFQs</a>
+                        <a href="/vendor/po" class="nav-link">Purchase Orders</a>
+                        <a href="/vendor/profile" class="nav-link">Company Settings</a>
+                    <% } else if (locals.user.role === 'admin') { %>
+                        <a href="/admin/dashboard" class="nav-link">Dashboard</a>
+                        <a href="/admin/users" class="nav-link">Manage Users</a>
+                        <a href="/admin/vendors" class="nav-link">Manage Vendors</a>
+                        <a href="/admin/analytics" class="nav-link">Procurement Analytics</a>
+                    <% } else if (locals.user.role === 'procurement_officer') { %>
+                        <a href="/procurement/dashboard" class="nav-link">Dashboard</a>
+                        <a href="/procurement/vendors" class="nav-link">Suppliers</a>
+                        <a href="/procurement/rfqs" class="nav-link">RFQs List</a>
+                        <a href="/procurement/rfqs/create" class="nav-link">Issue RFQ</a>
+                        <a href="/procurement/po" class="nav-link">Purchase Orders</a>
+                    <% } else if (locals.user.role === 'manager') { %>
+                        <a href="/manager/dashboard" class="nav-link">Dashboard</a>
+                        <a href="/manager/approvals" class="nav-link">Quotations Reviews</a>
+                    <% } %>
+                <% } %>
+            </nav>
+
+            <div class="nav-actions">
+                <% if (locals.user) { %>
+                    <span style="font-size: 0.85rem; color: var(--color-text-secondary); margin-right: 0.5rem; white-space: nowrap;" class="desktop-only">
+                        <strong><%= locals.user.name %></strong> 
+                        <span style="color: var(--color-text-muted);">[<%= locals.user.role.toUpperCase().replace('_', ' ') %>]</span>
+                    </span>
+
+                    <!-- Notification Bell Dropdown -->
+                    <div class="notification-dropdown-wrapper" style="position: relative; display: inline-block; margin-right: 0.75rem; z-index: 1000;">
+                        <button id="notification-bell-btn" class="nav-icon-btn" style="background: none; border: none; cursor: pointer; position: relative; color: var(--color-text-secondary); padding: 0.5rem; border-radius: 50%; transition: background-color 0.2s, color 0.2s; display: flex; align-items: center; justify-content: center;" aria-label="Notifications">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                                <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                            </svg>
+                            <% if (locals.unreadCount > 0) { %>
+                                <span id="notification-badge" style="position: absolute; top: 0; right: 0; background: var(--color-primary); color: #ffffff; font-size: 0.7rem; font-weight: bold; width: 16px; height: 16px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 8px var(--color-primary);">
+                                    <%= locals.unreadCount %>
+                                </span>
+                            <% } %>
+                        </button>
+                        <!-- Dropdown Card -->
+                        <div id="notification-dropdown-card" class="glass-card" style="display: none; position: absolute; right: 0; top: 100%; margin-top: 0.5rem; width: 320px; max-height: 400px; overflow-y: auto; z-index: 1010; padding: 1rem; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.5);">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 0.5rem;">
+                                <span style="font-weight: 600; font-size: 0.9rem; color: #ffffff;">Recent Notifications</span>
+                                <% if (locals.unreadCount > 0) { %>
+                                    <form action="/notifications/read-all" method="POST" style="margin: 0;">
+                                        <button type="submit" style="background: none; border: none; color: var(--color-primary); font-size: 0.75rem; cursor: pointer; font-weight: 500; padding: 0;">Mark all read</button>
+                                    </form>
+                                <% } %>
+                            </div>
+                            <div id="notification-list-mini" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                                <% if (locals.recentNotifications && locals.recentNotifications.length > 0) { %>
+                                    <% locals.recentNotifications.forEach(notif => { %>
+                                        <div class="notification-item-mini" data-id="<%= notif.id %>" style="padding: 0.5rem; border-radius: 8px; background: <%= notif.is_read ? 'rgba(255,255,255,0.02)' : 'rgba(99,102,241,0.08)' %>; border-left: 3px solid <%= notif.is_read ? 'transparent' : 'var(--color-primary)' %>; transition: background-color 0.2s; cursor: pointer; text-align: left;" onclick="markNotificationRead(<%= notif.id %>, this)">
+                                            <div style="font-weight: 600; font-size: 0.8rem; color: #ffffff; margin-bottom: 0.2rem;"><%= notif.title %></div>
+                                            <div style="font-size: 0.75rem; color: var(--color-text-muted); line-height: 1.2; margin-bottom: 0.2rem;"><%= notif.message %></div>
+                                            <div style="font-size: 0.65rem; color: var(--color-text-muted);"><%= new Date(notif.created_at).toLocaleString() %></div>
+                                        </div>
+                                    <% }) %>
+                                <% } else { %>
+                                    <div style="padding: 1.5rem; text-align: center; color: var(--color-text-muted); font-size: 0.8rem;">No new notifications.</div>
+                                <% } %>
+                            </div>
+                            <div style="border-top: 1px solid rgba(255,255,255,0.08); margin-top: 0.75rem; padding-top: 0.5rem; text-align: center;">
+                                <a href="/notifications" style="font-size: 0.8rem; color: var(--color-primary); text-decoration: none; font-weight: 600;">View All Notifications</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <a href="/auth/logout" class="btn btn-secondary btn-nav" style="padding: 0.5rem 1rem; font-size: 0.8rem; border-radius: 8px;">Sign Out</a>
+                <% } else { %>
+                    <a href="/auth/login" class="btn btn-secondary btn-nav">Sign In</a>
+                <% } %>
+
+                <style>
+                    .nav-icon-btn:hover {
+                        background-color: rgba(255, 255, 255, 0.08);
+                        color: #ffffff !important;
+                    }
+                    .notification-item-mini:hover {
+                        background-color: rgba(255, 255, 255, 0.05) !important;
+                    }
+                </style>
+                <script>
+                    document.addEventListener('DOMContentLoaded', () => {
+                        const bellBtn = document.getElementById('notification-bell-btn');
+                        const dropdownCard = document.getElementById('notification-dropdown-card');
+                        
+                        if (bellBtn && dropdownCard) {
+                            bellBtn.addEventListener('click', (e) => {
+                                e.stopPropagation();
+                                const isHidden = dropdownCard.style.display === 'none';
+                                dropdownCard.style.display = isHidden ? 'block' : 'none';
+                            });
+                            
+                            document.addEventListener('click', (e) => {
+                                if (!bellBtn.contains(e.target) && !dropdownCard.contains(e.target)) {
+                                    dropdownCard.style.display = 'none';
+                                }
+                            });
+                        }
+                    });
+
+                    async function markNotificationRead(id, element) {
+                        try {
+                            const response = await fetch(`/notifications/read/${id}`, {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                }
+                            });
+                            const data = await response.json();
+                            if (data.success) {
+                                // Dim item visual indicator
+                                element.style.background = 'rgba(255,255,255,0.02)';
+                                element.style.borderLeftColor = 'transparent';
+                                
+                                // Decrement badge count
+                                const badge = document.getElementById('notification-badge');
+                                if (badge) {
+                                    let count = parseInt(badge.innerText, 10);
+                                    if (count > 1) {
+                                        badge.innerText = count - 1;
+                                    } else {
+                                        badge.remove();
+                                    }
+                                }
+                            }
+                        } catch (err) {
+                            console.error('Error marking notification read:', err);
+                        }
+                    }
+                </script>
+                <button class="mobile-toggle" id="mobile-toggle" aria-label="Toggle Navigation">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- MOBILE OVERLAY MENU -->
+    <div class="mobile-menu-overlay" id="mobile-menu-overlay">
+        <nav class="mobile-nav-links">
+            <% if (locals.user) { %>
+                <% if (locals.user.role === 'vendor') { %>
+                    <a href="/vendor/dashboard" class="mobile-nav-link">Dashboard</a>
+                    <a href="/vendor/rfqs" class="mobile-nav-link">Assigned RFQs</a>
+                    <a href="/vendor/po" class="mobile-nav-link">Purchase Orders</a>
+                    <a href="/vendor/profile" class="mobile-nav-link">Company Settings</a>
+                <% } else if (locals.user.role === 'admin') { %>
+                    <a href="/admin/dashboard" class="mobile-nav-link">Dashboard</a>
+                    <a href="/admin/users" class="mobile-nav-link">Manage Users</a>
+                    <a href="/admin/vendors" class="mobile-nav-link">Manage Vendors</a>
+                    <a href="/admin/analytics" class="mobile-nav-link">Analytics</a>
+                <% } else if (locals.user.role === 'procurement_officer') { %>
+                    <a href="/procurement/dashboard" class="mobile-nav-link">Dashboard</a>
+                    <a href="/procurement/vendors" class="mobile-nav-link">Suppliers</a>
+                    <a href="/procurement/rfqs" class="mobile-nav-link">RFQs List</a>
+                    <a href="/procurement/rfqs/create" class="mobile-nav-link">Issue RFQ</a>
+                    <a href="/procurement/po" class="mobile-nav-link">Purchase Orders</a>
+                <% } else if (locals.user.role === 'manager') { %>
+                    <a href="/manager/dashboard" class="mobile-nav-link">Dashboard</a>
+                    <a href="/manager/approvals" class="mobile-nav-link">Approvals</a>
+                <% } %>
+                <a href="/auth/logout" class="btn btn-secondary btn-mobile-nav">Sign Out</a>
+            <% } else { %>
+                <a href="/auth/login" class="btn btn-secondary btn-mobile-nav">Sign In</a>
+            <% } %>
+        </nav>
+    </div>
+
+    <!-- Main Workspace Container wrapper (closed in footer) -->
+    <div class="container" style="padding-top: calc(var(--navbar-height) + 3rem); padding-bottom: 6rem; flex: 1 0 auto; position: relative; z-index: 2;">

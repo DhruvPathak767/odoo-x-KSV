@@ -1,0 +1,90 @@
+<%- include('../partials/header') %>
+
+<div style="margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+    <div>
+        <h1 style="font-size: 2.2rem; margin-bottom: 0.5rem;">Request for Quotations (RFQs)</h1>
+        <p style="color: var(--color-text-secondary);">Oversee active bidding cycles and evaluate vendor quotation submittals.</p>
+    </div>
+    <div style="display: flex; gap: 0.5rem; align-items: center;">
+        <span style="font-size: 0.8rem; color: var(--color-text-muted); margin-right: 0.25rem;">Export:</span>
+        <a href="/reports/export?entity=rfqs&type=pdf" class="btn btn-secondary" style="padding: 0.55rem 0.8rem; font-size: 0.8rem; border-radius: 8px;">PDF</a>
+        <a href="/reports/export?entity=rfqs&type=excel" class="btn btn-secondary" style="padding: 0.55rem 0.8rem; font-size: 0.8rem; border-radius: 8px;">Excel</a>
+        <a href="/reports/export?entity=rfqs&type=csv" class="btn btn-secondary" style="padding: 0.55rem 0.8rem; font-size: 0.8rem; border-radius: 8px;">CSV</a>
+        <a href="/procurement/rfqs/create" class="btn btn-primary btn-glow" style="margin-left: 0.5rem;">Issue New RFQ</a>
+    </div>
+</div>
+
+<!-- Search and filters -->
+<div class="glass-card" style="padding: 1.25rem; margin-bottom: 2rem;">
+    <form method="GET" action="/procurement/rfqs" style="display: flex; gap: 1rem; flex-wrap: wrap;">
+        <input type="text" name="search" class="form-control" placeholder="Search RFQ title..." value="<%= search %>" style="flex: 2; min-width: 200px;">
+        <select name="category" class="form-control" style="flex: 1; min-width: 150px;">
+            <option value="">All Categories</option>
+            <% categories.forEach(cat => { %>
+                <option value="<%= cat %>" <%= category === cat ? 'selected' : '' %>><%= cat %></option>
+            <% }) %>
+        </select>
+        <select name="status" class="form-control" style="flex: 1; min-width: 120px;">
+            <option value="">All Statuses</option>
+            <option value="Published" <%= status === 'Published' ? 'selected' : '' %>>Published</option>
+            <option value="Closed" <%= status === 'Closed' ? 'selected' : '' %>>Closed</option>
+            <option value="Cancelled" <%= status === 'Cancelled' ? 'selected' : '' %>>Cancelled</option>
+        </select>
+        <button type="submit" class="btn btn-primary" style="padding: 0.75rem 1.5rem;">Filter RFQs</button>
+    </form>
+</div>
+
+<!-- RFQ List Table -->
+<div class="glass-card" style="padding: 2rem;">
+    <% if (rfqs.length === 0) { %>
+        <p style="color: var(--color-text-muted); text-align: center; padding: 2rem 0;">No RFQs published match the selected filters.</p>
+    <% } else { %>
+        <div style="overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.95rem;">
+                <thead>
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.08); color: var(--color-text-muted);">
+                        <th style="padding: 1rem 0.5rem;">RFQ Ref #</th>
+                        <th style="padding: 1rem 0.5rem;">Title</th>
+                        <th style="padding: 1rem 0.5rem;">Category</th>
+                        <th style="padding: 1rem 0.5rem; text-align: right;">Budget</th>
+                        <th style="padding: 1rem 0.5rem; text-align: center;">Deadline Date</th>
+                        <th style="padding: 1rem 0.5rem; text-align: center;">Bidders</th>
+                        <th style="padding: 1rem 0.5rem; text-align: center;">Status</th>
+                        <th style="padding: 1rem 0.5rem; text-align: right;">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% rfqs.forEach(rfq => { %>
+                        <tr style="border-bottom: 1px solid rgba(255,255,255,0.03);">
+                            <td style="padding: 1rem 0.5rem; font-family: monospace; font-weight: 700; color: var(--color-primary);">
+                                RFQ-<%= String(rfq.id).padStart(4, '0') %>
+                            </td>
+                            <td style="padding: 1rem 0.5rem;">
+                                <strong style="color: #ffffff;"><%= rfq.title %></strong>
+                                <span style="display: block; font-size: 0.75rem; color: var(--color-text-muted);">Issued by <%= rfq.creator_name %></span>
+                            </td>
+                            <td style="padding: 1rem 0.5rem;"><%= rfq.category %></td>
+                            <td style="padding: 1rem 0.5rem; text-align: right; font-family: monospace; font-weight: 600;">$<%= parseFloat(rfq.budget).toLocaleString() %></td>
+                            <td style="padding: 1rem 0.5rem; text-align: center; font-family: monospace;"><%= new Date(rfq.deadline).toLocaleDateString() %></td>
+                            <td style="padding: 1rem 0.5rem; text-align: center;">
+                                <span style="background: rgba(255,255,255,0.04); padding: 0.2rem 0.6rem; border-radius: 6px; font-weight: bold;"><%= rfq.vendor_count %></span>
+                            </td>
+                            <td style="padding: 1rem 0.5rem; text-align: center;">
+                                <span class="module-status-pill <%= rfq.status === 'Published' ? 'status-active-badge' : 'status-upcoming' %>" style="margin-top: 0; font-size: 0.65rem;">
+                                    <%= rfq.status %>
+                                </span>
+                            </td>
+                            <td style="padding: 1rem 0.5rem; text-align: right;">
+                                <a href="/procurement/rfqs/compare/<%= rfq.id %>" class="btn btn-secondary" style="padding: 0.45rem 0.85rem; font-size: 0.75rem; border-radius: 8px;">
+                                    Compare bids &rarr;
+                                </a>
+                            </td>
+                        </tr>
+                    <% }) %>
+                </tbody>
+            </table>
+        </div>
+    <% } %>
+</div>
+
+<%- include('../partials/footer') %>

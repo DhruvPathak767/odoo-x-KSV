@@ -1,0 +1,380 @@
+<%- include('../partials/header') %>
+
+    <div style="margin-bottom: 2rem;">
+        <a href="/procurement/rfqs"
+            style="color: var(--color-primary); font-size: 0.9rem; display: inline-flex; align-items: center; gap: 0.25rem; margin-bottom: 0.75rem;">
+            &larr; Back to RFQ List
+        </a>
+        <h1 style="font-size: 2.2rem; margin-bottom: 0.5rem;">Issue New RFQ</h1>
+        <p style="color: var(--color-text-secondary);">Set up guidelines, add line items, and invite matching vendors to
+            submit quotation bids.</p>
+    </div>
+
+    <div class="glass-card" style="padding: 2.5rem; max-width: 900px; margin: 0 auto;">
+        <div class="grid-overlay"></div>
+
+        <!-- Alert container -->
+        <div id="alert-container"></div>
+
+        <form class="auth-form" id="rfq-create-form" method="POST" action="/procurement/rfqs/create"
+            style="gap: 1.5rem;">
+            <h3
+                style="font-size: 1.1rem; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 0.5rem; color: var(--color-primary); margin-bottom: 1rem;">
+                RFQ Header Specifications</h3>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                <div class="form-group" style="grid-column: span 2;">
+                    <label for="title" class="form-label">RFQ Title *</label>
+                    <input type="text" id="title" name="title" class="form-control"
+                        placeholder="Annual Procurement of Office IT Laptops" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="category" class="form-label">Business Category *</label>
+                    <select id="category" name="category" class="form-control" required>
+                        <option value="" disabled selected>Select category</option>
+                        <option value="IT Solutions">IT Solutions & Hardware</option>
+                        <option value="Raw Materials">Raw Materials</option>
+                        <option value="Chemicals">Industrial Chemicals</option>
+                        <option value="Logistics">Logistics & Freight</option>
+                        <option value="Office Logistics">Office supplies & Logistics</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="budget" class="form-label">Total Allocated Budget ($) *</label>
+                    <input type="number" id="budget" name="budget" class="form-control" placeholder="50000" required
+                        step="0.01" min="0.01">
+                </div>
+
+                <div class="form-group">
+                    <label for="deadline" class="form-label">Bidding Deadline Date *</label>
+                    <input type="date" id="deadline" name="deadline" class="form-control" required
+                        min="<%= new Date().toISOString().split('T')[0] %>">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="description" class="form-label">Guidelines / Statement of Work (SOW) *</label>
+                <textarea id="description" name="description" class="form-control" rows="4"
+                    placeholder="Detail shipping requirements, quality standards, and evaluation guidelines..."
+                    required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="attachment" class="form-label">Guidelines Document (Optional) <span
+                        style="color: var(--color-text-muted); font-size: 0.8rem;">(Allowed: .pdf, .docx, .xlsx, .png,
+                        .jpg, .jpeg)</span></label>
+                <input type="file" id="attachment" name="attachment" class="form-control"
+                    style="padding: 0.5rem; background: rgba(0,0,0,0.25);">
+            </div>
+
+            <!-- LINE ITEMS SECTON -->
+            <h3
+                style="font-size: 1.1rem; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 0.5rem; color: var(--color-primary); margin-top: 1.5rem; display: flex; justify-content: space-between; align-items: center;">
+                <span>Required Line Items</span>
+                <button type="button" class="btn btn-secondary" id="add-item-btn"
+                    style="padding: 0.4rem 0.8rem; font-size: 0.75rem; border-radius: 6px;">+ Add Line Item</button>
+            </h3>
+
+            <div id="items-list-container" style="display: flex; flex-direction: column; gap: 1rem;">
+                <!-- Line Item Rows injected dynamically here -->
+                <div class="item-row"
+                    style="display: grid; grid-template-columns: 2fr 1fr 1fr auto; gap: 1rem; align-items: center;">
+                    <input type="text" name="items[0][item_name]" class="form-control"
+                        placeholder="Item name / specification" required>
+                    <input type="number" name="items[0][quantity]" class="form-control" placeholder="Qty" min="1"
+                        required>
+                    <input type="number" name="items[0][target_price]" class="form-control"
+                        placeholder="Target price ($)" step="0.01" min="0.01">
+                    <span style="width: 24px;"></span> <!-- Spacer for first row (no delete) -->
+                </div>
+            </div>
+
+            <!-- ASSIGN VENDORS CHECKLIST -->
+            <h3
+                style="font-size: 1.1rem; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 0.5rem; color: var(--color-primary); margin-top: 1.5rem; margin-bottom: 1rem;">
+                Invite Suppliers</h3>
+            <div class="glass-card"
+                style="padding: 1.25rem; max-height: 250px; overflow-y: auto; background: rgba(0,0,0,0.15);">
+                <% if (vendors.length===0) { %>
+                    <p style="color: var(--color-text-muted); font-size: 0.9rem; text-align: center;">No active approved
+                        vendors found. Onboard vendors in the directory first.</p>
+                    <% } else { %>
+                        <div
+                            style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 1rem;">
+                            <% vendors.forEach(v=> { %>
+                                <label
+                                    style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; color: var(--color-text-secondary); cursor: pointer;">
+                                    <input type="checkbox" name="assigned_vendors" value="<%= v.id %>"
+                                        style="width: 16px; height: 16px; accent-color: var(--color-primary);">
+                                    <span>
+                                        <strong>
+                                            <%= v.company_name %>
+                                        </strong>
+                                        <small
+                                            style="display: block; color: var(--color-text-muted); font-size: 0.75rem;">
+                                            <%= v.category %>
+                                        </small>
+                                    </span>
+                                </label>
+                                <% }) %>
+                        </div>
+                        <% } %>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-glow btn-auth-submit" id="btn-submit"
+                style="margin-top: 1.5rem;">
+                <span>Publish and Broadcast RFQ</span>
+            </button>
+        </form>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const itemsContainer = document.getElementById('items-list-container');
+            const addItemBtn = document.getElementById('add-item-btn');
+            let itemIndex = 1;
+
+            function escapeHtml(str) {
+                if (!str) return '';
+                return str
+                    .replace(/&/g, "&amp;")
+                    .replace(/</g, "&lt;")
+                    .replace(/>/g, "&gt;")
+                    .replace(/"/g, "&quot;")
+                    .replace(/'/g, "&#039;");
+            }
+
+            // Helper function to dynamically add a line item row
+            function addItemRow(name = '', quantity = '', targetPrice = '', isFirstRow = false) {
+                const rowDiv = document.createElement('div');
+                rowDiv.className = 'item-row';
+                rowDiv.style.display = 'grid';
+                rowDiv.style.gridTemplateColumns = '2fr 1fr 1fr auto';
+                rowDiv.style.gap = '1rem';
+                rowDiv.style.alignItems = 'center';
+
+                const actionBtn = isFirstRow
+                    ? `<span style="width: 34px;"></span>`
+                    : `<button type="button" class="btn-action reject delete-row-btn" style="border-radius: 6px; width: 34px; height: 34px;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                   </button>`;
+
+                rowDiv.innerHTML = `
+                <input type="text" name="items[${itemIndex}][item_name]" class="form-control" placeholder="Item name / specification" value="${escapeHtml(name)}" required>
+                <input type="number" name="items[${itemIndex}][quantity]" class="form-control" placeholder="Qty" min="1" value="${quantity}" required>
+                <input type="number" name="items[${itemIndex}][target_price]" class="form-control" placeholder="Target price ($)" step="0.01" min="0.01" value="${targetPrice}">
+                ${actionBtn}
+            `;
+
+                itemsContainer.appendChild(rowDiv);
+
+                if (!isFirstRow) {
+                    rowDiv.querySelector('.delete-row-btn').addEventListener('click', () => {
+                        rowDiv.remove();
+                    });
+                }
+
+                itemIndex++;
+            }
+
+            // Dynamic Line Item Addition
+            addItemBtn.addEventListener('click', () => {
+                addItemRow();
+            });
+
+            // Form Submit handler via AJAX
+            const rfqForm = document.getElementById('rfq-create-form');
+            const alertContainer = document.getElementById('alert-container');
+
+            const showAlert = (message, type = 'error') => {
+                alertContainer.innerHTML = `
+                <div class="alert-banner alert-banner-${type}">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                    <span>${message}</span>
+                </div>
+            `;
+            };
+
+            // File attachment change listener for auto-reading PDF guidelines
+            const attachmentInput = document.getElementById('attachment');
+            attachmentInput.addEventListener('change', async (e) => {
+                const file = e.target.files[0];
+                if (!file) return;
+
+                // Only auto-parse if it is a PDF
+                if (!file.name.toLowerCase().endsWith('.pdf')) {
+                    return;
+                }
+
+                showAlert('Analyzing PDF guidelines document... Please wait.', 'info');
+
+                const submitBtn = document.getElementById('btn-submit');
+                const btnSpan = submitBtn.querySelector('span');
+                submitBtn.disabled = true;
+                const originalText = btnSpan.textContent;
+                btnSpan.textContent = 'Reading PDF...';
+
+                const formData = new FormData();
+                formData.append('attachment', file);
+
+                try {
+                    const response = await fetch('/procurement/rfqs/analyze-pdf', {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    const result = await response.json();
+
+                    if (response.ok && result.success && result.data) {
+                        const data = result.data;
+
+                        // Populate RFQ Header fields
+                        if (data.title) {
+                            document.getElementById('title').value = data.title;
+                        }
+                        if (data.category) {
+                            const catSelect = document.getElementById('category');
+                            let matched = false;
+                            for (let opt of catSelect.options) {
+                                if (opt.value.toLowerCase() === data.category.toLowerCase()) {
+                                    catSelect.value = opt.value;
+                                    matched = true;
+                                    break;
+                                }
+                            }
+                            // Substring fallback
+                            if (!matched) {
+                                for (let opt of catSelect.options) {
+                                    if (opt.value && (opt.value.toLowerCase().includes(data.category.toLowerCase()) || data.category.toLowerCase().includes(opt.value.toLowerCase()))) {
+                                        catSelect.value = opt.value;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                        if (data.budget) {
+                            document.getElementById('budget').value = data.budget;
+                        }
+                        if (data.deadline) {
+                            document.getElementById('deadline').value = data.deadline;
+                        }
+                        if (data.description) {
+                            document.getElementById('description').value = data.description;
+                        }
+
+                        // Populate Line Items
+                        if (data.items && data.items.length > 0) {
+                            // Clear existing
+                            itemsContainer.innerHTML = '';
+                            itemIndex = 0;
+
+                            // Add parsed items
+                            data.items.forEach((item, idx) => {
+                                addItemRow(item.item_name, item.quantity, item.target_price || '', idx === 0);
+                            });
+                        }
+
+                        showAlert('PDF guidelines document read successfully! Form fields and line items auto-populated.', 'success');
+                    } else {
+                        showAlert(result.message || 'Failed to read PDF. You can still fill the form manually.', 'error');
+                    }
+                } catch (err) {
+                    console.error(err);
+                    showAlert('Network error analyzing PDF. You can still fill the form manually.', 'error');
+                } finally {
+                    submitBtn.disabled = false;
+                    btnSpan.textContent = originalText;
+                }
+            });
+
+            rfqForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+
+                const submitBtn = document.getElementById('btn-submit');
+                const btnSpan = submitBtn.querySelector('span');
+
+                // Collect Form data and structure line items array
+                const title = document.getElementById('title').value.trim();
+                const category = document.getElementById('category').value;
+                const budget = parseFloat(document.getElementById('budget').value);
+                const deadline = document.getElementById('deadline').value;
+                const description = document.getElementById('description').value.trim();
+
+                const rows = itemsContainer.querySelectorAll('.item-row');
+                const items = [];
+                rows.forEach(row => {
+                    const inputs = row.querySelectorAll('input');
+                    if (inputs.length >= 2) {
+                        items.push({
+                            item_name: inputs[0].value.trim(),
+                            quantity: parseInt(inputs[1].value, 10),
+                            target_price: inputs[2] && inputs[2].value ? parseFloat(inputs[2].value) : null
+                        });
+                    }
+                });
+
+                const checkedVendors = [];
+                const checkboxes = rfqForm.querySelectorAll('input[name="assigned_vendors"]:checked');
+                checkboxes.forEach(cb => {
+                    checkedVendors.push(parseInt(cb.value, 10));
+                });
+
+                if (items.length === 0) {
+                    showAlert('At least one line item must be added.');
+                    return;
+                }
+
+                if (checkedVendors.length === 0) {
+                    showAlert('At least one vendor must be invited to bid.');
+                    return;
+                }
+
+                submitBtn.disabled = true;
+                btnSpan.textContent = 'Publishing RFQ...';
+
+                // Construct FormData payload
+                const formData = new FormData();
+                formData.append('title', title);
+                formData.append('category', category);
+                formData.append('budget', budget);
+                formData.append('deadline', deadline);
+                formData.append('description', description);
+                formData.append('items', JSON.stringify(items));
+                formData.append('assigned_vendors', JSON.stringify(checkedVendors));
+
+                const attachmentInput = document.getElementById('attachment');
+                if (attachmentInput && attachmentInput.files[0]) {
+                    formData.append('attachment', attachmentInput.files[0]);
+                }
+
+                try {
+                    const response = await fetch('/procurement/rfqs/create', {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    const result = await response.json();
+
+                    if (response.ok && result.success) {
+                        showAlert(result.message, 'success');
+                        setTimeout(() => {
+                            window.location.href = result.redirectUrl || '/procurement/rfqs';
+                        }, 1500);
+                    } else {
+                        showAlert(result.message || 'Error publishing RFQ.', 'error');
+                        submitBtn.disabled = false;
+                        btnSpan.textContent = 'Publish and Broadcast RFQ';
+                    }
+                } catch (err) {
+                    console.error(err);
+                    showAlert('Network request failed. Try again.', 'error');
+                    submitBtn.disabled = false;
+                    btnSpan.textContent = 'Publish and Broadcast RFQ';
+                }
+            });
+        });
+    </script>
+
+    <%- include('../partials/footer') %>

@@ -1,0 +1,316 @@
+<%- include('../partials/header') %>
+
+<div style="margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+    <div>
+        <h1 style="font-size: 2.2rem; margin-bottom: 0.5rem;">Procurement Analytics</h1>
+        <p style="color: var(--color-text-secondary);">Enterprise spending summaries, supplier distribution metrics, and bidding stats.</p>
+    </div>
+    <div style="display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap;">
+        <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); padding: 0.5rem 1rem; border-radius: 10px; display: flex; gap: 0.5rem; align-items: center;">
+            <span style="font-size: 0.8rem; color: var(--color-text-muted);">Ledger:</span>
+            <a href="/reports/export?entity=invoices&type=pdf" class="btn btn-secondary" style="padding: 0.35rem 0.6rem; font-size: 0.75rem; border-radius: 6px;">Invoices PDF</a>
+            <a href="/reports/export?entity=invoices&type=excel" class="btn btn-secondary" style="padding: 0.35rem 0.6rem; font-size: 0.75rem; border-radius: 6px;">Excel</a>
+        </div>
+        <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); padding: 0.5rem 1rem; border-radius: 10px; display: flex; gap: 0.5rem; align-items: center;">
+            <span style="font-size: 0.8rem; color: var(--color-text-muted);">Bids:</span>
+            <a href="/reports/export?entity=quotes&type=pdf" class="btn btn-secondary" style="padding: 0.35rem 0.6rem; font-size: 0.75rem; border-radius: 6px;">Quotes PDF</a>
+            <a href="/reports/export?entity=quotes&type=excel" class="btn btn-secondary" style="padding: 0.35rem 0.6rem; font-size: 0.75rem; border-radius: 6px;">Excel</a>
+        </div>
+    </div>
+</div>
+
+<!-- Top level KPI highlight card -->
+<div class="glass-card" style="padding: 2.5rem 2rem; text-align: center; margin-bottom: 2rem; min-height: 140px; display: flex; flex-direction: column; justify-content: center; align-items: center; background: linear-gradient(135deg, rgba(236,72,153,0.06), rgba(99,102,241,0.06)); border-color: rgba(236,72,153,0.15);">
+    <div style="font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-text-muted); font-family: 'Outfit'; font-weight: 600; margin-bottom: 0.5rem;">System-Wide Average Quotation Amount</div>
+    <div style="font-size: 3.5rem; font-weight: 900; color: #ffffff; font-family: 'Outfit'; background: linear-gradient(90deg, #ffffff, var(--color-primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+        $<%= parseFloat(metrics.avgPrice).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) %>
+    </div>
+    <span style="font-size: 0.75rem; color: var(--color-text-muted); margin-top: 0.25rem;">Calculated across all submitted and approved bids</span>
+</div>
+
+<!-- Chart Filters Card -->
+<div class="glass-card" style="padding: 1.5rem; margin-bottom: 2rem; position: relative; z-index: 10;">
+    <div style="display: flex; gap: 1rem; flex-wrap: wrap; align-items: flex-end;">
+        <div style="flex: 1.5; min-width: 200px;">
+            <label class="form-label" style="font-size: 0.8rem; margin-bottom: 0.35rem; display: block; color: var(--color-text-muted);">Business Category</label>
+            <select id="filter-category" class="form-control" style="padding: 0.5rem; font-size: 0.85rem; background: rgba(0,0,0,0.4);">
+                <option value="">All Categories</option>
+                <option value="IT Solutions">IT Solutions & Hardware</option>
+                <option value="Raw Materials">Raw Materials</option>
+                <option value="Chemicals">Industrial Chemicals</option>
+                <option value="Logistics">Logistics & Freight</option>
+                <option value="Office Logistics">Office supplies & Logistics</option>
+            </select>
+        </div>
+        <div style="flex: 1; min-width: 120px;">
+            <label class="form-label" style="font-size: 0.8rem; margin-bottom: 0.35rem; display: block; color: var(--color-text-muted);">Year</label>
+            <select id="filter-year" class="form-control" style="padding: 0.5rem; font-size: 0.85rem; background: rgba(0,0,0,0.4);">
+                <option value="">All Years</option>
+                <option value="2026">2026</option>
+                <option value="2025">2025</option>
+            </select>
+        </div>
+        <div style="flex: 1.2; min-width: 150px;">
+            <label class="form-label" style="font-size: 0.8rem; margin-bottom: 0.35rem; display: block; color: var(--color-text-muted);">Start Date</label>
+            <input type="date" id="filter-start-date" class="form-control" style="padding: 0.45rem; font-size: 0.85rem; background: rgba(0,0,0,0.4);">
+        </div>
+        <div style="flex: 1.2; min-width: 150px;">
+            <label class="form-label" style="font-size: 0.8rem; margin-bottom: 0.35rem; display: block; color: var(--color-text-muted);">End Date</label>
+            <input type="date" id="filter-end-date" class="form-control" style="padding: 0.45rem; font-size: 0.85rem; background: rgba(0,0,0,0.4);">
+        </div>
+        <div>
+            <button id="apply-filters-btn" class="btn btn-primary btn-glow" style="padding: 0.6rem 1.5rem; font-size: 0.85rem; border-radius: 8px;">
+                Apply Filters
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Dynamic Charts Grid -->
+<div style="display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 2rem; margin-bottom: 2rem; align-items: stretch;">
+    <!-- Monthly Spend Trend -->
+    <div class="glass-card" style="padding: 2rem; display: flex; flex-direction: column;">
+        <h3 style="font-size: 1.2rem; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem; color: var(--color-primary);">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+            Monthly Spend Analysis ($)
+        </h3>
+        <div style="position: relative; flex: 1; min-height: 300px;">
+            <canvas id="monthlySpendChart"></canvas>
+        </div>
+    </div>
+
+    <!-- Vendor Distribution by Category -->
+    <div class="glass-card" style="padding: 2rem; display: flex; flex-direction: column;">
+        <h3 style="font-size: 1.2rem; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem; color: var(--color-accent);">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg>
+            Suppliers by Category
+        </h3>
+        <div style="position: relative; flex: 1; min-height: 300px; display: flex; align-items: center; justify-content: center;">
+            <canvas id="vendorDistChart"></canvas>
+        </div>
+    </div>
+</div>
+
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 2rem; align-items: stretch;">
+    <!-- RFQ Trends by Category -->
+    <div class="glass-card" style="padding: 2rem; display: flex; flex-direction: column;">
+        <h3 style="font-size: 1.2rem; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem; color: #818cf8;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+            RFQ Bidding Trends
+        </h3>
+        <div style="position: relative; flex: 1; min-height: 250px;">
+            <canvas id="rfqTrendsChart"></canvas>
+        </div>
+    </div>
+
+    <!-- Manager Decision Stats -->
+    <div class="glass-card" style="padding: 2rem; display: flex; flex-direction: column;">
+        <h3 style="font-size: 1.2rem; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem; color: #fbbf24;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            Executive Approvals Ratio
+        </h3>
+        <div style="position: relative; flex: 1; min-height: 250px; display: flex; align-items: center; justify-content: center;">
+            <canvas id="approvalTrendsChart"></canvas>
+        </div>
+    </div>
+</div>
+
+<!-- Chart.js from CDN -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // Init chart references
+        window.spendChartInstance = null;
+        window.vendorChartInstance = null;
+        window.rfqChartInstance = null;
+        window.approvalChartInstance = null;
+
+        // Fetch & render handler
+        async function updateDashboardCharts() {
+            const category = document.getElementById('filter-category').value;
+            const year = document.getElementById('filter-year').value;
+            const startDate = document.getElementById('filter-start-date').value;
+            const endDate = document.getElementById('filter-end-date').value;
+
+            // Build query params
+            const queryParams = new URLSearchParams();
+            if (category) queryParams.append('category', category);
+            if (year) queryParams.append('year', year);
+            if (startDate) queryParams.append('start_date', startDate);
+            if (endDate) queryParams.append('end_date', endDate);
+
+            const queryString = queryParams.toString() ? '?' + queryParams.toString() : '';
+
+            try {
+                // 1. Fetch Monthly Spend
+                const spendRes = await fetch(`/api/analytics/monthly-spend${queryString}`);
+                const spendData = await spendRes.json();
+
+                // 2. Fetch Vendor Distribution
+                const vendorRes = await fetch(`/api/analytics/vendor-distribution${queryString}`);
+                const vendorData = await vendorRes.json();
+
+                // 3. Fetch RFQ Category Trends
+                const rfqRes = await fetch(`/api/analytics/rfq-trends${queryString}`);
+                const rfqData = await rfqRes.json();
+
+                // 4. Fetch Approval Trends
+                const approvalRes = await fetch(`/api/analytics/approval-trends${queryString}`);
+                const approvalData = await approvalRes.json();
+
+                // Render Spend Chart
+                const spendCtx = document.getElementById('monthlySpendChart').getContext('2d');
+                if (window.spendChartInstance) window.spendChartInstance.destroy();
+                
+                const spendLabels = spendData.data.map(d => d.month);
+                const spendValues = spendData.data.map(d => parseFloat(d.spend));
+
+                window.spendChartInstance = new Chart(spendCtx, {
+                    type: 'line',
+                    data: {
+                        labels: spendLabels.length ? spendLabels : ['No Data'],
+                        datasets: [{
+                            label: 'Spend ($)',
+                            data: spendValues.length ? spendValues : [0],
+                            borderColor: '#ec4899',
+                            backgroundColor: 'rgba(236, 72, 153, 0.15)',
+                            borderWidth: 3,
+                            fill: true,
+                            tension: 0.35,
+                            pointBackgroundColor: '#6366f1',
+                            pointHoverRadius: 7
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false }
+                        },
+                        scales: {
+                            y: {
+                                grid: { color: 'rgba(255, 255, 255, 0.05)' },
+                                ticks: { color: '#94a3b8' }
+                            },
+                            x: {
+                                grid: { display: false },
+                                ticks: { color: '#94a3b8' }
+                            }
+                        }
+                    }
+                });
+
+                // Render Vendor Distribution Chart (Doughnut)
+                const vendorCtx = document.getElementById('vendorDistChart').getContext('2d');
+                if (window.vendorChartInstance) window.vendorChartInstance.destroy();
+
+                const vendorLabels = vendorData.data.map(d => d.category);
+                const vendorValues = vendorData.data.map(d => d.count);
+
+                window.vendorChartInstance = new Chart(vendorCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: vendorLabels.length ? vendorLabels : ['None'],
+                        datasets: [{
+                            data: vendorValues.length ? vendorValues : [0],
+                            backgroundColor: ['#6366f1', '#ec4899', '#10b981', '#fbbf24', '#a855f7', '#06b6d4'],
+                            borderWidth: 1,
+                            borderColor: 'rgba(255,255,255,0.05)'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: { color: '#94a3b8', boxWidth: 12, font: { size: 10 } }
+                            }
+                        }
+                    }
+                });
+
+                // Render RFQ Trends (Bar)
+                const rfqCtx = document.getElementById('rfqTrendsChart').getContext('2d');
+                if (window.rfqChartInstance) window.rfqChartInstance.destroy();
+
+                const rfqLabels = rfqData.data.map(d => d.category);
+                const rfqValues = rfqData.data.map(d => d.count);
+
+                window.rfqChartInstance = new Chart(rfqCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: rfqLabels.length ? rfqLabels : ['No RFQs'],
+                        datasets: [{
+                            label: 'RFQ Count',
+                            data: rfqValues.length ? rfqValues : [0],
+                            backgroundColor: 'rgba(99, 102, 241, 0.65)',
+                            borderColor: '#6366f1',
+                            borderWidth: 1.5,
+                            borderRadius: 6
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false }
+                        },
+                        scales: {
+                            y: {
+                                grid: { color: 'rgba(255, 255, 255, 0.05)' },
+                                ticks: { color: '#94a3b8', stepSize: 1 }
+                            },
+                            x: {
+                                grid: { display: false },
+                                ticks: { color: '#94a3b8' }
+                            }
+                        }
+                    }
+                });
+
+                // Render Approval Trends (Pie)
+                const approvalCtx = document.getElementById('approvalTrendsChart').getContext('2d');
+                if (window.approvalChartInstance) window.approvalChartInstance.destroy();
+
+                const approvalLabels = approvalData.data.map(d => d.status);
+                const approvalValues = approvalData.data.map(d => d.count);
+
+                window.approvalChartInstance = new Chart(approvalCtx, {
+                    type: 'pie',
+                    data: {
+                        labels: approvalLabels.length ? approvalLabels : ['No Approvals'],
+                        datasets: [{
+                            data: approvalValues.length ? approvalValues : [0],
+                            backgroundColor: ['#10b981', '#ef4444', '#fbbf24'], // Green for Approved, Red for Rejected, Yellow for Pending
+                            borderWidth: 1,
+                            borderColor: 'rgba(255,255,255,0.05)'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: { color: '#94a3b8', boxWidth: 12, font: { size: 10 } }
+                            }
+                        }
+                    }
+                });
+
+            } catch (err) {
+                console.error('Error fetching/rendering dashboard metrics:', err);
+            }
+        }
+
+        // Bind Apply Filters button click
+        document.getElementById('apply-filters-btn').addEventListener('click', updateDashboardCharts);
+
+        // Run initially on load
+        updateDashboardCharts();
+    });
+</script>
+
+<%- include('../partials/footer') %>

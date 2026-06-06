@@ -1,17 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= title %></title>
-    <meta name="description" content="Manage vendors, RFQs, quotations, approvals, purchase orders, and invoices from one centralized, highly automated platform. Modern ERP built for enterprise procurement.">
+    <title>
+        <%= title %>
+    </title>
+    <meta name="description"
+        content="Manage vendors, RFQs, quotations, approvals, purchase orders, and invoices from one centralized, highly automated platform. Modern ERP built for enterprise procurement.">
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
     <!-- Main Stylesheet -->
     <link rel="stylesheet" href="/style.css">
 </head>
+
 <body>
     <!-- Premium Noise & Spotlight overlays -->
     <div class="noise-overlay"></div>
@@ -29,15 +36,17 @@
     <header class="navbar" id="navbar">
         <div class="nav-container">
             <a href="#" class="logo-group" id="nav-logo">
-                <svg class="logo-icon" width="36" height="36" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <svg class="logo-icon" width="36" height="36" viewBox="0 0 100 100" fill="none"
+                    xmlns="http://www.w3.org/2000/svg">
                     <defs>
                         <linearGradient id="logo-grad" x1="0%" y1="0%" x2="100%" y2="100%">
                             <stop offset="0%" stop-color="#ec4899" />
                             <stop offset="100%" stop-color="#6366f1" />
                         </linearGradient>
                     </defs>
-                    <path d="M20 70 L40 30 L60 30 L80 70" stroke="url(#logo-grad)" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M30 55 L70 55" stroke="#ec4899" stroke-width="8" stroke-linecap="round"/>
+                    <path d="M20 70 L40 30 L60 30 L80 70" stroke="url(#logo-grad)" stroke-width="10"
+                        stroke-linecap="round" stroke-linejoin="round" />
+                    <path d="M30 55 L70 55" stroke="#ec4899" stroke-width="8" stroke-linecap="round" />
                     <circle cx="50" cy="30" r="8" fill="#ec4899" class="logo-dot" />
                 </svg>
                 <span class="logo-text">Vendor<span>Bridge</span></span>
@@ -47,21 +56,20 @@
                 <a href="#features" class="nav-link">Features</a>
                 <a href="#workflow" class="nav-link">Workflow</a>
                 <a href="#benefits" class="nav-link">Benefits</a>
-                <a href="#contact" class="nav-link">Contact</a>
+                <a href="#contact" class="nav-link">Contact Us</a>
             </nav>
 
             <div class="nav-actions">
                 <% if (user) { %>
                     <a href="/dashboard" class="btn btn-primary btn-nav">Dashboard</a>
-                <% } else { %>
-                    <a href="/auth/login" class="btn btn-secondary btn-nav">Sign In</a>
-                    <a href="#contact" class="btn btn-primary btn-nav">Request Demo</a>
-                <% } %>
-                <button class="mobile-toggle" id="mobile-toggle" aria-label="Toggle Navigation">
-                    <span class="bar"></span>
-                    <span class="bar"></span>
-                    <span class="bar"></span>
-                </button>
+                    <% } else { %>
+                        <a href="/auth/login" class="btn btn-secondary btn-nav">Sign In</a>
+                        <% } %>
+                            <button class="mobile-toggle" id="mobile-toggle" aria-label="Toggle Navigation">
+                                <span class="bar"></span>
+                                <span class="bar"></span>
+                                <span class="bar"></span>
+                            </button>
             </div>
         </div>
     </header>
@@ -72,14 +80,13 @@
             <a href="#features" class="mobile-nav-link">Features</a>
             <a href="#workflow" class="mobile-nav-link">Workflow</a>
             <a href="#benefits" class="mobile-nav-link">Benefits</a>
-            <a href="#contact" class="mobile-nav-link">Contact</a>
+            <a href="#contact" class="mobile-nav-link">Contact Us</a>
             <% if (user) { %>
                 <a href="/dashboard" class="btn btn-primary btn-mobile-nav">Dashboard</a>
                 <a href="/auth/logout" class="btn btn-secondary btn-mobile-nav">Sign Out</a>
-            <% } else { %>
-                <a href="/auth/login" class="btn btn-secondary btn-mobile-nav">Sign In</a>
-                <a href="#contact" class="btn btn-primary btn-mobile-nav">Request Demo</a>
-            <% } %>
+                <% } else { %>
+                    <a href="/auth/login" class="btn btn-secondary btn-mobile-nav">Sign In</a>
+                    <% } %>
         </nav>
     </div>
 
@@ -102,9 +109,11 @@
                         </filter>
                     </defs>
                     <!-- Curved bridge beams -->
-                    <path d="M 100 350 Q 500 120, 900 350" stroke="url(#bridge-grad)" stroke-width="5" fill="none" stroke-linecap="round" filter="url(#bridge-glow)" />
-                    <path d="M 100 375 Q 500 170, 900 375" stroke="url(#bridge-grad)" stroke-width="2.5" fill="none" stroke-dasharray="12 12" />
-                    
+                    <path d="M 100 350 Q 500 120, 900 350" stroke="url(#bridge-grad)" stroke-width="5" fill="none"
+                        stroke-linecap="round" filter="url(#bridge-glow)" />
+                    <path d="M 100 375 Q 500 170, 900 375" stroke="url(#bridge-grad)" stroke-width="2.5" fill="none"
+                        stroke-dasharray="12 12" />
+
                     <!-- Vertical hanger cords -->
                     <line x1="200" y1="288" x2="200" y2="356" stroke="rgba(168, 85, 247, 0.15)" stroke-width="1" />
                     <line x1="300" y1="238" x2="300" y2="362" stroke="rgba(168, 85, 247, 0.15)" stroke-width="1" />
@@ -135,17 +144,19 @@
                         Procurement Made <span class="gradient-text">Intelligent</span>
                     </h1>
                     <p class="hero-subtitle">
-                        Manage vendors, RFQs, quotations, approvals, purchase orders and invoices from one centralized, automated platform. Streamline collaboration and control costs effortlessly.
+                        Manage vendors, RFQs, quotations, approvals, purchase orders and invoices from one centralized,
+                        automated platform. Streamline collaboration and control costs effortlessly.
                     </p>
-                    <div class="hero-actions">
-                        <a href="#contact" class="btn btn-primary btn-glow">Request Demo</a>
-                        <a href="#workflow" class="btn btn-secondary">
+                    <div class="hero-actions" style="display: flex; gap: 1.5rem; align-items: center;">
+                        <a href="#workflow" class="btn btn-primary btn-glow">
                             <span>Explore Workflow</span>
-                            <svg class="btn-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <svg class="btn-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <line x1="5" y1="12" x2="19" y2="12"></line>
                                 <polyline points="12 5 19 12 12 19"></polyline>
                             </svg>
                         </a>
+                        <a href="#contact" class="nav-link" style="font-weight: 600; font-size: 0.95rem;">Contact Us</a>
                     </div>
                 </div>
 
@@ -156,7 +167,14 @@
                             <div class="card-header">
                                 <div class="card-title-group">
                                     <span class="card-icon cyan-icon">
-                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                                            stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                            stroke-linejoin="round">
+                                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                            <circle cx="9" cy="7" r="4"></circle>
+                                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                                            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                                        </svg>
                                     </span>
                                     <span>Active Vendors</span>
                                 </div>
@@ -192,7 +210,15 @@
                             <div class="card-header">
                                 <div class="card-title-group">
                                     <span class="card-icon purple-icon">
-                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                                            stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                            stroke-linejoin="round">
+                                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                            <polyline points="14 2 14 8 20 8"></polyline>
+                                            <line x1="16" y1="13" x2="8" y2="13"></line>
+                                            <line x1="16" y1="17" x2="8" y2="17"></line>
+                                            <polyline points="10 9 9 9 8 9"></polyline>
+                                        </svg>
                                     </span>
                                     <span>Active RFQs</span>
                                 </div>
@@ -200,8 +226,13 @@
                             <div class="card-body flex-row">
                                 <div class="gauge-container">
                                     <svg class="gauge" width="70" height="70" viewBox="0 0 36 36">
-                                        <path class="gauge-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="3"/>
-                                        <path class="gauge-fill" stroke-dasharray="78, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="url(#cyan-purple-grad)" stroke-width="3" stroke-linecap="round"/>
+                                        <path class="gauge-bg"
+                                            d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                                            fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="3" />
+                                        <path class="gauge-fill" stroke-dasharray="78, 100"
+                                            d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                                            fill="none" stroke="url(#cyan-purple-grad)" stroke-width="3"
+                                            stroke-linecap="round" />
                                         <defs>
                                             <linearGradient id="cyan-purple-grad" x1="0%" y1="0%" x2="100%" y2="100%">
                                                 <stop offset="0%" stop-color="#ec4899" />
@@ -223,7 +254,12 @@
                             <div class="card-header">
                                 <div class="card-title-group">
                                     <span class="card-icon green-icon">
-                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                                            stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                            stroke-linejoin="round">
+                                            <line x1="12" y1="1" x2="12" y2="23"></line>
+                                            <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                                        </svg>
                                     </span>
                                     <span>Quote Analysis</span>
                                 </div>
@@ -251,7 +287,12 @@
                             <div class="card-header">
                                 <div class="card-title-group">
                                     <span class="card-icon yellow-icon">
-                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                                            stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                            stroke-linejoin="round">
+                                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                                        </svg>
                                     </span>
                                     <span>Approval Pending</span>
                                 </div>
@@ -262,10 +303,17 @@
                                     <span class="price-tag">$42,900</span>
                                     <div class="approval-actions">
                                         <button class="btn-action reject" aria-label="Reject">
-                                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none"
+                                                stroke="currentColor" stroke-width="2.5">
+                                                <line x1="18" y1="6" x2="6" y2="18"></line>
+                                                <line x1="6" y1="6" x2="18" y2="18"></line>
+                                            </svg>
                                         </button>
                                         <button class="btn-action approve" aria-label="Approve">
-                                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none"
+                                                stroke="currentColor" stroke-width="2.5">
+                                                <polyline points="20 6 9 17 4 12"></polyline>
+                                            </svg>
                                         </button>
                                     </div>
                                 </div>
@@ -277,7 +325,14 @@
                             <div class="card-header">
                                 <div class="card-title-group">
                                     <span class="card-icon blue-icon">
-                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                                            stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                            stroke-linejoin="round">
+                                            <rect x="1" y="3" width="15" height="13"></rect>
+                                            <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
+                                            <circle cx="5.5" cy="18.5" r="2.5"></circle>
+                                            <circle cx="18.5" cy="18.5" r="2.5"></circle>
+                                        </svg>
                                     </span>
                                     <span>PO #0492 Tracking</span>
                                 </div>
@@ -306,7 +361,13 @@
                             <div class="card-header">
                                 <div class="card-title-group">
                                     <span class="card-icon gold-icon">
-                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2" ry="2"></rect><line x1="12" y1="4" x2="12" y2="20"></line><line x1="2" y1="12" x2="22" y2="12"></line></svg>
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                                            stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                            stroke-linejoin="round">
+                                            <rect x="2" y="4" width="20" height="16" rx="2" ry="2"></rect>
+                                            <line x1="12" y1="4" x2="12" y2="20"></line>
+                                            <line x1="2" y1="12" x2="22" y2="12"></line>
+                                        </svg>
                                     </span>
                                     <span>Monthly Procurement Spend</span>
                                 </div>
@@ -314,15 +375,18 @@
                             </div>
                             <div class="card-body">
                                 <div class="chart-container">
-                                    <svg class="spend-chart" width="100%" height="45" viewBox="0 0 100 30" preserveAspectRatio="none">
+                                    <svg class="spend-chart" width="100%" height="45" viewBox="0 0 100 30"
+                                        preserveAspectRatio="none">
                                         <defs>
                                             <linearGradient id="chart-glow" x1="0%" y1="0%" x2="0%" y2="100%">
                                                 <stop offset="0%" stop-color="rgba(236, 72, 153, 0.4)" />
                                                 <stop offset="100%" stop-color="rgba(236, 72, 153, 0)" />
                                             </linearGradient>
                                         </defs>
-                                        <path d="M 0 25 Q 15 15, 30 18 T 60 5 T 90 10 L 100 8 L 100 30 L 0 30 Z" fill="url(#chart-glow)"/>
-                                        <path d="M 0 25 Q 15 15, 30 18 T 60 5 T 90 10 L 100 8" fill="none" stroke="#ec4899" stroke-width="2" stroke-linecap="round"/>
+                                        <path d="M 0 25 Q 15 15, 30 18 T 60 5 T 90 10 L 100 8 L 100 30 L 0 30 Z"
+                                            fill="url(#chart-glow)" />
+                                        <path d="M 0 25 Q 15 15, 30 18 T 60 5 T 90 10 L 100 8" fill="none"
+                                            stroke="#ec4899" stroke-width="2" stroke-linecap="round" />
                                         <!-- Interactive floating nodes -->
                                         <circle cx="60" cy="5" r="2.5" fill="#6366f1" class="pulse-dot" />
                                     </svg>
@@ -344,7 +408,8 @@
                 <div class="section-header reveal-fade-up">
                     <span class="section-tag">Continuous Stream</span>
                     <h2 class="section-title">Automated Lifecycle</h2>
-                    <p class="section-subtitle">Watch standard purchasing workflows progress seamlessly. Our engine automates checkpoints and guarantees audit compliance automatically.</p>
+                    <p class="section-subtitle">Watch standard purchasing workflows progress seamlessly. Our engine
+                        automates checkpoints and guarantees audit compliance automatically.</p>
                 </div>
 
                 <div class="workflow-visualizer reveal-fade-up">
@@ -354,7 +419,14 @@
                         <div class="workflow-step active-step" data-step="1">
                             <div class="step-icon-outer">
                                 <div class="step-icon">
-                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                        <polyline points="14 2 14 8 20 8"></polyline>
+                                        <line x1="16" y1="13" x2="8" y2="13"></line>
+                                        <line x1="16" y1="17" x2="8" y2="17"></line>
+                                        <polyline points="10 9 9 9 8 9"></polyline>
+                                    </svg>
                                 </div>
                                 <div class="step-num-badge">1</div>
                             </div>
@@ -364,9 +436,12 @@
 
                         <!-- Connector Line 1 -->
                         <div class="workflow-connector desktop-only">
-                            <svg class="connector-svg" width="100%" height="20" viewBox="0 0 100 20" preserveAspectRatio="none">
-                                <line x1="0" y1="10" x2="100" y2="10" stroke="rgba(255,255,255,0.05)" stroke-width="2"/>
-                                <line x1="0" y1="10" x2="100" y2="10" stroke="#ec4899" stroke-width="2" class="glowing-line" id="line-1"/>
+                            <svg class="connector-svg" width="100%" height="20" viewBox="0 0 100 20"
+                                preserveAspectRatio="none">
+                                <line x1="0" y1="10" x2="100" y2="10" stroke="rgba(255,255,255,0.05)"
+                                    stroke-width="2" />
+                                <line x1="0" y1="10" x2="100" y2="10" stroke="#ec4899" stroke-width="2"
+                                    class="glowing-line" id="line-1" />
                             </svg>
                         </div>
 
@@ -374,7 +449,11 @@
                         <div class="workflow-step" data-step="2">
                             <div class="step-icon-outer">
                                 <div class="step-icon">
-                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                        <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                                    </svg>
                                 </div>
                                 <div class="step-num-badge">2</div>
                             </div>
@@ -384,9 +463,12 @@
 
                         <!-- Connector Line 2 -->
                         <div class="workflow-connector desktop-only">
-                            <svg class="connector-svg" width="100%" height="20" viewBox="0 0 100 20" preserveAspectRatio="none">
-                                <line x1="0" y1="10" x2="100" y2="10" stroke="rgba(255,255,255,0.05)" stroke-width="2"/>
-                                <line x1="0" y1="10" x2="100" y2="10" stroke="#6366f1" stroke-width="2" class="glowing-line" id="line-2"/>
+                            <svg class="connector-svg" width="100%" height="20" viewBox="0 0 100 20"
+                                preserveAspectRatio="none">
+                                <line x1="0" y1="10" x2="100" y2="10" stroke="rgba(255,255,255,0.05)"
+                                    stroke-width="2" />
+                                <line x1="0" y1="10" x2="100" y2="10" stroke="#6366f1" stroke-width="2"
+                                    class="glowing-line" id="line-2" />
                             </svg>
                         </div>
 
@@ -394,7 +476,11 @@
                         <div class="workflow-step" data-step="3">
                             <div class="step-icon-outer">
                                 <div class="step-icon">
-                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                                        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                                    </svg>
                                 </div>
                                 <div class="step-num-badge">3</div>
                             </div>
@@ -404,9 +490,12 @@
 
                         <!-- Connector Line 3 -->
                         <div class="workflow-connector desktop-only">
-                            <svg class="connector-svg" width="100%" height="20" viewBox="0 0 100 20" preserveAspectRatio="none">
-                                <line x1="0" y1="10" x2="100" y2="10" stroke="rgba(255,255,255,0.05)" stroke-width="2"/>
-                                <line x1="0" y1="10" x2="100" y2="10" stroke="#7928ca" stroke-width="2" class="glowing-line" id="line-3"/>
+                            <svg class="connector-svg" width="100%" height="20" viewBox="0 0 100 20"
+                                preserveAspectRatio="none">
+                                <line x1="0" y1="10" x2="100" y2="10" stroke="rgba(255,255,255,0.05)"
+                                    stroke-width="2" />
+                                <line x1="0" y1="10" x2="100" y2="10" stroke="#7928ca" stroke-width="2"
+                                    class="glowing-line" id="line-3" />
                             </svg>
                         </div>
 
@@ -414,7 +503,11 @@
                         <div class="workflow-step" data-step="4">
                             <div class="step-icon-outer">
                                 <div class="step-icon">
-                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <circle cx="12" cy="12" r="10"></circle>
+                                        <polyline points="12 6 12 12 16 14"></polyline>
+                                    </svg>
                                 </div>
                                 <div class="step-num-badge">4</div>
                             </div>
@@ -424,9 +517,12 @@
 
                         <!-- Connector Line 4 -->
                         <div class="workflow-connector desktop-only">
-                            <svg class="connector-svg" width="100%" height="20" viewBox="0 0 100 20" preserveAspectRatio="none">
-                                <line x1="0" y1="10" x2="100" y2="10" stroke="rgba(255,255,255,0.05)" stroke-width="2"/>
-                                <line x1="0" y1="10" x2="100" y2="10" stroke="#ec4899" stroke-width="2" class="glowing-line" id="line-4"/>
+                            <svg class="connector-svg" width="100%" height="20" viewBox="0 0 100 20"
+                                preserveAspectRatio="none">
+                                <line x1="0" y1="10" x2="100" y2="10" stroke="rgba(255,255,255,0.05)"
+                                    stroke-width="2" />
+                                <line x1="0" y1="10" x2="100" y2="10" stroke="#ec4899" stroke-width="2"
+                                    class="glowing-line" id="line-4" />
                             </svg>
                         </div>
 
@@ -434,7 +530,12 @@
                         <div class="workflow-step" data-step="5">
                             <div class="step-icon-outer">
                                 <div class="step-icon">
-                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2" ry="2"></rect><line x1="12" y1="4" x2="12" y2="20"></line><line x1="2" y1="12" x2="22" y2="12"></line></svg>
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <rect x="2" y="4" width="20" height="16" rx="2" ry="2"></rect>
+                                        <line x1="12" y1="4" x2="12" y2="20"></line>
+                                        <line x1="2" y1="12" x2="22" y2="12"></line>
+                                    </svg>
                                 </div>
                                 <div class="step-num-badge">5</div>
                             </div>
@@ -452,7 +553,8 @@
                 <div class="section-header reveal-fade-up">
                     <span class="section-tag">Modular Power</span>
                     <h2 class="section-title">Built for Complex Workloads</h2>
-                    <p class="section-subtitle">Eliminate friction from supply chain operations. Every component operates in complete harmony.</p>
+                    <p class="section-subtitle">Eliminate friction from supply chain operations. Every component
+                        operates in complete harmony.</p>
                 </div>
 
                 <div class="features-grid">
@@ -460,17 +562,28 @@
                     <div class="glass-card feature-card reveal-fade-up" data-tilt id="card-vendor-mgmt">
                         <div class="card-glow-element"></div>
                         <div class="feature-icon cyan-icon-glow">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="9" cy="7" r="4"></circle>
+                                <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                            </svg>
                         </div>
                         <h3>Vendor Management</h3>
-                        <p>Maintain verified profiles, review scorecards, track performance metrics, and compliance standings inside a secure repository.</p>
-                        
+                        <p>Maintain verified profiles, review scorecards, track performance metrics, and compliance
+                            standings inside a secure repository.</p>
+
                         <!-- Micro simulation -->
                         <div class="micro-sim vendor-sim">
                             <div class="compliance-circle-outer">
                                 <svg class="compliance-svg" width="70" height="70" viewBox="0 0 36 36">
-                                    <path class="comp-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="rgba(255,255,255,0.03)" stroke-width="3"/>
-                                    <path class="comp-fill" stroke-dasharray="0, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="url(#logo-grad)" stroke-width="3" stroke-linecap="round"/>
+                                    <path class="comp-bg"
+                                        d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                                        fill="none" stroke="rgba(255,255,255,0.03)" stroke-width="3" />
+                                    <path class="comp-fill" stroke-dasharray="0, 100"
+                                        d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                                        fill="none" stroke="url(#logo-grad)" stroke-width="3" stroke-linecap="round" />
                                 </svg>
                                 <div class="compliance-value">0%</div>
                             </div>
@@ -482,11 +595,19 @@
                     <div class="glass-card feature-card reveal-fade-up" data-tilt id="card-rfq-mgmt">
                         <div class="card-glow-element"></div>
                         <div class="feature-icon purple-icon-glow">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                <polyline points="14 2 14 8 20 8"></polyline>
+                                <line x1="16" y1="13" x2="8" y2="13"></line>
+                                <line x1="16" y1="17" x2="8" y2="17"></line>
+                                <polyline points="10 9 9 9 8 9"></polyline>
+                            </svg>
                         </div>
                         <h3>RFQ Creation</h3>
-                        <p>Generate highly custom request templates, add target specs, automatically enforce timeline rules, and bulk-dispatch requests instantly.</p>
-                        
+                        <p>Generate highly custom request templates, add target specs, automatically enforce timeline
+                            rules, and bulk-dispatch requests instantly.</p>
+
                         <!-- Micro simulation -->
                         <div class="micro-sim rfq-sim">
                             <div class="terminal-header">
@@ -496,7 +617,8 @@
                                 <span class="terminal-title">rfq_engine.sh</span>
                             </div>
                             <div class="terminal-body">
-                                <div class="terminal-prompt">> <span class="typing-text">rfq --dispatch --all</span></div>
+                                <div class="terminal-prompt">> <span class="typing-text">rfq --dispatch --all</span>
+                                </div>
                                 <div class="terminal-log"></div>
                             </div>
                         </div>
@@ -506,11 +628,17 @@
                     <div class="glass-card feature-card reveal-fade-up" data-tilt id="card-quote-mgmt">
                         <div class="card-glow-element"></div>
                         <div class="feature-icon green-icon-glow">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <line x1="18" y1="20" x2="18" y2="10"></line>
+                                <line x1="12" y1="20" x2="12" y2="4"></line>
+                                <line x1="6" y1="20" x2="6" y2="14"></line>
+                            </svg>
                         </div>
                         <h3>Quotation Comparison</h3>
-                        <p>View side-by-side matrices instantly. Use automated scoring to rank bids based on price, delivery time, and history metrics.</p>
-                        
+                        <p>View side-by-side matrices instantly. Use automated scoring to rank bids based on price,
+                            delivery time, and history metrics.</p>
+
                         <!-- Micro simulation -->
                         <div class="micro-sim quote-sim">
                             <div class="bar-chart-sim">
@@ -534,16 +662,24 @@
                     <div class="glass-card feature-card reveal-fade-up" data-tilt id="card-approval-mgmt">
                         <div class="card-glow-element"></div>
                         <div class="feature-icon blue-icon-glow">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                            </svg>
                         </div>
                         <h3>Approval Workflow</h3>
-                        <p>Deploy conditional approval triggers (e.g. by department or dollar amounts) and gather digital signatures via audit-locked logs.</p>
-                        
+                        <p>Deploy conditional approval triggers (e.g. by department or dollar amounts) and gather
+                            digital signatures via audit-locked logs.</p>
+
                         <!-- Micro simulation -->
                         <div class="micro-sim approval-sim">
                             <div class="approval-slider-track">
                                 <div class="approval-slider-handle">
-                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2.5">
+                                        <polyline points="9 18 15 12 9 6"></polyline>
+                                    </svg>
                                 </div>
                                 <span class="slider-text">Swipe to Approve</span>
                             </div>
@@ -555,11 +691,18 @@
                     <div class="glass-card feature-card reveal-fade-up" data-tilt id="card-po-mgmt">
                         <div class="card-glow-element"></div>
                         <div class="feature-icon gold-icon-glow">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="1" y="3" width="15" height="13"></rect>
+                                <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
+                                <circle cx="5.5" cy="18.5" r="2.5"></circle>
+                                <circle cx="18.5" cy="18.5" r="2.5"></circle>
+                            </svg>
                         </div>
                         <h3>Purchase Orders</h3>
-                        <p>Generate PO contracts automatically from winning quotations. Track fulfillment, dispatch logistics, and receipt confirmations.</p>
-                        
+                        <p>Generate PO contracts automatically from winning quotations. Track fulfillment, dispatch
+                            logistics, and receipt confirmations.</p>
+
                         <!-- Micro simulation -->
                         <div class="micro-sim po-sim">
                             <div class="po-path-visual">
@@ -589,11 +732,17 @@
                     <div class="glass-card feature-card reveal-fade-up" data-tilt id="card-invoice-mgmt">
                         <div class="card-glow-element"></div>
                         <div class="feature-icon red-icon-glow">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2" ry="2"></rect><line x1="12" y1="4" x2="12" y2="20"></line><line x1="2" y1="12" x2="22" y2="12"></line></svg>
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="2" y="4" width="20" height="16" rx="2" ry="2"></rect>
+                                <line x1="12" y1="4" x2="12" y2="20"></line>
+                                <line x1="2" y1="12" x2="22" y2="12"></line>
+                            </svg>
                         </div>
                         <h3>Invoice Management</h3>
-                        <p>Enforce strict 3-way matches across POs, goods-received notes, and invoices to flag anomalies and process accounts payable fast.</p>
-                        
+                        <p>Enforce strict 3-way matches across POs, goods-received notes, and invoices to flag anomalies
+                            and process accounts payable fast.</p>
+
                         <!-- Micro simulation -->
                         <div class="micro-sim invoice-sim">
                             <div class="matching-ledger">
@@ -647,7 +796,8 @@
                 <div class="section-header reveal-fade-up">
                     <span class="section-tag">Enterprise Architecture</span>
                     <h2 class="section-title">End-to-End Synergy</h2>
-                    <p class="section-subtitle">Legacy supply chain models involve fragmented databases. VendorBridge anchors the entire cycle inside a single real-time ledger.</p>
+                    <p class="section-subtitle">Legacy supply chain models involve fragmented databases. VendorBridge
+                        anchors the entire cycle inside a single real-time ledger.</p>
                 </div>
 
                 <div class="network-viz-container reveal-fade-up">
@@ -672,14 +822,20 @@
                         <!-- Central Hub Lines -->
                         <g class="network-lines">
                             <!-- Left to Hub -->
-                            <path d="M 150 150 Q 300 200, 500 250" stroke="url(#cyan-glow-grad)" stroke-width="2" fill="none" class="dash-path" />
-                            <path d="M 150 250 L 500 250" stroke="url(#cyan-glow-grad)" stroke-width="2" fill="none" class="dash-path" />
-                            <path d="M 150 350 Q 300 300, 500 250" stroke="url(#cyan-glow-grad)" stroke-width="2" fill="none" class="dash-path" />
+                            <path d="M 150 150 Q 300 200, 500 250" stroke="url(#cyan-glow-grad)" stroke-width="2"
+                                fill="none" class="dash-path" />
+                            <path d="M 150 250 L 500 250" stroke="url(#cyan-glow-grad)" stroke-width="2" fill="none"
+                                class="dash-path" />
+                            <path d="M 150 350 Q 300 300, 500 250" stroke="url(#cyan-glow-grad)" stroke-width="2"
+                                fill="none" class="dash-path" />
 
                             <!-- Hub to Right -->
-                            <path d="M 500 250 Q 700 200, 850 150" stroke="url(#purple-glow-grad)" stroke-width="2" fill="none" class="dash-path" />
-                            <path d="M 500 250 L 850 250" stroke="url(#purple-glow-grad)" stroke-width="2" fill="none" class="dash-path" />
-                            <path d="M 500 250 Q 700 300, 850 350" stroke="url(#purple-glow-grad)" stroke-width="2" fill="none" class="dash-path" />
+                            <path d="M 500 250 Q 700 200, 850 150" stroke="url(#purple-glow-grad)" stroke-width="2"
+                                fill="none" class="dash-path" />
+                            <path d="M 500 250 L 850 250" stroke="url(#purple-glow-grad)" stroke-width="2" fill="none"
+                                class="dash-path" />
+                            <path d="M 500 250 Q 700 300, 850 350" stroke="url(#purple-glow-grad)" stroke-width="2"
+                                fill="none" class="dash-path" />
                         </g>
 
                         <!-- Glowing Flowing Particles -->
@@ -705,15 +861,27 @@
 
                     <!-- DOM Node Elements placed over SVG coordinates -->
                     <div class="net-node node-vendor" style="top: 30%; left: 15%;">
-                        <div class="node-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg></div>
+                        <div class="node-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2">
+                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="9" cy="7" r="4"></circle>
+                            </svg></div>
                         <span>Vendor Database</span>
                     </div>
                     <div class="net-node node-rfq" style="top: 50%; left: 15%;">
-                        <div class="node-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg></div>
+                        <div class="node-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                <polyline points="14 2 14 8 20 8"></polyline>
+                            </svg></div>
                         <span>RFQs Sent</span>
                     </div>
                     <div class="net-node node-quote" style="top: 70%; left: 15%;">
-                        <div class="node-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg></div>
+                        <div class="node-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2">
+                                <line x1="12" y1="1" x2="12" y2="23"></line>
+                                <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                            </svg></div>
                         <span>Quotation Matrices</span>
                     </div>
 
@@ -724,9 +892,11 @@
                         <div class="hub-hologram-ring hub-hologram-ring-1"></div>
                         <div class="hub-hologram-ring hub-hologram-ring-2"></div>
                         <div class="node-icon hub-icon">
-                            <svg class="pulse-icon" width="28" height="28" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M20 70 L40 30 L60 30 L80 70" stroke="#ec4899" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
-                                <path d="M30 55 L70 55" stroke="#ec4899" stroke-width="9" stroke-linecap="round"/>
+                            <svg class="pulse-icon" width="28" height="28" viewBox="0 0 100 100" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path d="M20 70 L40 30 L60 30 L80 70" stroke="#ec4899" stroke-width="12"
+                                    stroke-linecap="round" stroke-linejoin="round" />
+                                <path d="M30 55 L70 55" stroke="#ec4899" stroke-width="9" stroke-linecap="round" />
                             </svg>
                         </div>
                         <span class="hub-title">VendorBridge ERP</span>
@@ -734,15 +904,28 @@
 
                     <!-- Right nodes -->
                     <div class="net-node node-approval" style="top: 30%; left: 85%;">
-                        <div class="node-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg></div>
+                        <div class="node-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                            </svg></div>
                         <span>Approvals Ledger</span>
                     </div>
                     <div class="net-node node-po" style="top: 50%; left: 85%;">
-                        <div class="node-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"></rect><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg></div>
+                        <div class="node-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2">
+                                <rect x="1" y="3" width="15" height="13"></rect>
+                                <circle cx="5.5" cy="18.5" r="2.5"></circle>
+                                <circle cx="18.5" cy="18.5" r="2.5"></circle>
+                            </svg></div>
                         <span>Purchase Orders</span>
                     </div>
                     <div class="net-node node-invoice" style="top: 70%; left: 85%;">
-                        <div class="node-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2" ry="2"></rect><line x1="12" y1="4" x2="12" y2="20"></line></svg></div>
+                        <div class="node-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2">
+                                <rect x="2" y="4" width="20" height="16" rx="2" ry="2"></rect>
+                                <line x1="12" y1="4" x2="12" y2="20"></line>
+                            </svg></div>
                         <span>Ledger Invoices</span>
                     </div>
                 </div>
@@ -757,12 +940,19 @@
                 <div class="glass-card cta-card">
                     <div class="grid-overlay"></div>
                     <h2>Transform Procurement Operations</h2>
-                    <p>Automate procurement workflows, reduce order cycles by 50%, and maintain complete transparency across all vendors. Set up a secure sandbox environment today.</p>
-                    <div class="cta-form-container">
-                        <form class="cta-form" onsubmit="event.preventDefault(); alert('Demo requested! We will reach out within 2 hours.');">
-                            <input type="email" placeholder="Enter your business email" required aria-label="Business Email">
-                            <button type="submit" class="btn btn-primary btn-glow">Get Started</button>
-                        </form>
+                    <p>Automate procurement workflows, reduce order cycles by 50%, and maintain complete transparency
+                        across all vendors. Set up a secure sandbox environment today.</p>
+                    <div style="margin-top: 1.5rem;">
+                        <a href="mailto:info@vendorbridge.com" class="btn btn-primary btn-glow"
+                            style="gap: 0.65rem; padding: 0.85rem 2.5rem; font-size: 1rem; border-radius: 12px; display: inline-flex; align-items: center; text-decoration: none;">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z">
+                                </path>
+                                <polyline points="22,6 12,13 2,6"></polyline>
+                            </svg>
+                            info@vendorbridge.com
+                        </a>
                     </div>
                 </div>
             </div>
@@ -781,12 +971,14 @@
                                 <stop offset="100%" stop-color="#6366f1" />
                             </linearGradient>
                         </defs>
-                        <path d="M20 70 L40 30 L60 30 L80 70" stroke="url(#footer-logo-grad)" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M30 55 L70 55" stroke="#ec4899" stroke-width="8" stroke-linecap="round"/>
+                        <path d="M20 70 L40 30 L60 30 L80 70" stroke="url(#footer-logo-grad)" stroke-width="10"
+                            stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M30 55 L70 55" stroke="#ec4899" stroke-width="8" stroke-linecap="round" />
                     </svg>
                     <span class="logo-text">Vendor<span>Bridge</span></span>
                 </a>
-                <p class="footer-desc">Procurement & Vendor Management ERP. Built for 2026 enterprise supply chain operations.</p>
+                <p class="footer-desc">Procurement & Vendor Management ERP. Built for 2026 enterprise supply chain
+                    operations.</p>
             </div>
             <div class="footer-links-grid">
                 <div class="footer-col">
@@ -817,4 +1009,5 @@
     <!-- Main JavaScript File -->
     <script src="/script.js"></script>
 </body>
+
 </html>

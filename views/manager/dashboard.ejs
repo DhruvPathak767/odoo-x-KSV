@@ -1,0 +1,97 @@
+<%- include('../partials/header') %>
+
+<div class="dashboard-hero" style="margin-bottom: 2rem;">
+    <div class="glass-card dashboard-welcome-card" style="padding: 2.5rem 2rem;">
+        <div class="grid-overlay"></div>
+        <div class="badge-wrapper">
+            <span class="badge" style="border-color: rgba(236,72,153,0.25); color: var(--color-primary);">
+                <span class="badge-pulse" style="background-color: var(--color-primary);"></span>
+                Executive Approvals Center Live
+            </span>
+        </div>
+        <h1 style="font-size: 2.5rem; margin-bottom: 0.5rem;">
+            Manager Cockpit
+        </h1>
+        <p style="color: var(--color-text-secondary); max-width: 600px;">
+            Authorize budget allocations, review supplier quotations, and monitor decision histories.
+        </p>
+        
+        <div style="display: flex; gap: 1rem; margin-top: 1.5rem; flex-wrap: wrap;">
+            <a href="/manager/approvals" class="btn btn-primary btn-glow" style="font-size: 0.85rem; padding: 0.6rem 1.25rem;">
+                Review Pending Quotes (<%= metrics.pending %>)
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Metrics Cards -->
+<div class="metrics-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+    <div class="glass-card" style="padding: 1.75rem 1.5rem; min-height: 140px; display: flex; flex-direction: column; justify-content: space-between;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-text-muted); font-family: 'Outfit'; font-weight: 600;">Pending Reviews</span>
+            <span class="metric-icon" style="background: rgba(245, 158, 11, 0.15); color: #fbbf24; padding: 0.35rem 0.5rem; border-radius: 8px;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+            </span>
+        </div>
+        <div>
+            <div style="font-size: 2.5rem; font-weight: 800; color: #ffffff;"><%= metrics.pending %></div>
+            <span style="font-size: 0.75rem; color: var(--color-warning);">Bids awaiting decision</span>
+        </div>
+    </div>
+
+    <div class="glass-card" style="padding: 1.75rem 1.5rem; min-height: 140px; display: flex; flex-direction: column; justify-content: space-between;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-text-muted); font-family: 'Outfit'; font-weight: 600;">Resolved Audits</span>
+            <span class="metric-icon" style="background: rgba(16, 185, 129, 0.15); color: #34d399; padding: 0.35rem 0.5rem; border-radius: 8px;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            </span>
+        </div>
+        <div>
+            <div style="font-size: 2.5rem; font-weight: 800; color: #ffffff;"><%= metrics.cleared %></div>
+            <span style="font-size: 0.75rem; color: var(--color-text-muted);">Decisions logged in history</span>
+        </div>
+    </div>
+</div>
+
+<!-- Pending Approvals list -->
+<div class="glass-card" style="padding: 2rem;">
+    <h3 style="font-size: 1.25rem; margin-bottom: 1.25rem; display: flex; align-items: center; gap: 0.5rem;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--color-primary);"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+        Quotations Under Evaluation
+    </h3>
+
+    <% if (pendingApprovals.length === 0) { %>
+        <p style="color: var(--color-text-muted); text-align: center; padding: 1.5rem 0;">No pending cost reviews assigned. All cleared!</p>
+    <% } else { %>
+        <div style="overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.9rem;">
+                <thead>
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.06); color: var(--color-text-muted);">
+                        <th style="padding: 0.75rem 0.5rem;">RFQ Details</th>
+                        <th style="padding: 0.75rem 0.5rem;">Allocated Budget</th>
+                        <th style="padding: 0.75rem 0.5rem;">Vendor Bid</th>
+                        <th style="padding: 0.75rem 0.5rem; text-align: center;">Delivery Days</th>
+                        <th style="padding: 0.75rem 0.5rem; text-align: right;">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% pendingApprovals.forEach(app => { %>
+                        <tr style="border-bottom: 1px solid rgba(255,255,255,0.03);">
+                            <td style="padding: 0.75rem 0.5rem;">
+                                <strong style="color: #ffffff;"><%= app.rfq_title %></strong>
+                            </td>
+                            <td style="padding: 0.75rem 0.5rem; font-family: monospace;">$<%= parseFloat(app.rfq_budget).toLocaleString() %></td>
+                            <td style="padding: 0.75rem 0.5rem; font-family: monospace; color: var(--color-primary); font-weight: bold;">$<%= parseFloat(app.quote_price).toLocaleString() %></td>
+                            <td style="padding: 0.75rem 0.5rem; text-align: center; font-family: monospace;"><%= app.delivery_days %> days</td>
+                            <td style="padding: 0.75rem 0.5rem; text-align: right;">
+                                <a href="/manager/approvals/<%= app.id %>" class="btn btn-secondary" style="padding: 0.4rem 0.75rem; font-size: 0.75rem; border-radius: 6px;">Evaluate & Decide</a>
+                            </td>
+                        </tr>
+                    <% }) %>
+                </tbody>
+            </table>
+        </div>
+    <% } %>
+</div>
+
+<%- include('../partials/footer') %>

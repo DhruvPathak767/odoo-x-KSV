@@ -2,6 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Select forms
     const loginForm = document.getElementById('login-form');
     const registerForm = document.getElementById('register-form');
+    const vendorRegisterForm = document.getElementById('vendor-register-form');
     const forgotForm = document.getElementById('forgot-form');
     const resetForm = document.getElementById('reset-form');
 
@@ -51,6 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (textSpan) {
                 if (form.id === 'login-form') textSpan.textContent = 'Sign In';
                 else if (form.id === 'register-form') textSpan.textContent = 'Create Account';
+                else if (form.id === 'vendor-register-form') textSpan.textContent = 'Submit Application';
                 else if (form.id === 'forgot-form') textSpan.textContent = 'Send Reset Link';
                 else if (form.id === 'reset-form') textSpan.textContent = 'Save Password & Sign In';
             }
@@ -143,6 +145,47 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             handleFormSubmit(registerForm, '/auth/register');
+        });
+    }
+
+    // 2b. VENDOR REGISTER FORM VALIDATION & AJAX SUBMISSION
+    if (vendorRegisterForm) {
+        vendorRegisterForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const company_name = vendorRegisterForm.company_name.value.trim();
+            const gst_number = vendorRegisterForm.gst_number.value.trim();
+            const category = vendorRegisterForm.category.value;
+            const contact_person = vendorRegisterForm.contact_person.value.trim();
+            const phone = vendorRegisterForm.phone.value.trim();
+            const email = vendorRegisterForm.email.value.trim();
+            const password = vendorRegisterForm.password.value;
+            const confirmPassword = vendorRegisterForm.confirmPassword.value;
+            const address = vendorRegisterForm.address.value.trim();
+            const city = vendorRegisterForm.city.value.trim();
+            const state = vendorRegisterForm.state.value.trim();
+            const country = vendorRegisterForm.country.value.trim();
+
+            if (!company_name || !gst_number || !category || !contact_person || !phone || !email || !password || !confirmPassword || !address || !city || !state || !country) {
+                showAlert('Please fill in all required fields marked with *');
+                return;
+            }
+
+            if (!validateEmail(email)) {
+                showAlert('Please enter a valid email address.');
+                return;
+            }
+
+            if (password.length < 8) {
+                showAlert('Password must be at least 8 characters long.');
+                return;
+            }
+
+            if (password !== confirmPassword) {
+                showAlert('Passwords do not match. Re-enter password.');
+                return;
+            }
+
+            handleFormSubmit(vendorRegisterForm, '/vendor/register');
         });
     }
 

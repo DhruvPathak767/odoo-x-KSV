@@ -23,17 +23,36 @@ async function init() {
     }
     const schemaSql = fs.readFileSync(schemaPath, 'utf8');
 
-    // Split queries by semicolon and clean them up
-    const queries = schemaSql
+    // Remove single-line comments and split queries by semicolon
+    const cleanSql = schemaSql
+        .split('\n')
+        .filter(line => !line.trim().startsWith('--') && !line.trim().startsWith('#'))
+        .join('\n');
+
+    const queries = cleanSql
         .split(';')
         .map(q => q.trim())
-        .filter(q => q.length > 0 && !q.startsWith('--') && !q.startsWith('/*'));
+        .filter(q => q.length > 0);
 
     console.log('Executing schema queries...');
     for (const query of queries) {
         if (query.toUpperCase().startsWith('USE ')) continue;
         if (query.toUpperCase().startsWith('CREATE DATABASE ')) continue;
         await connection.query(query);
+    }
+
+    console.log('Seeding default admin user...');
+    const adminEmail = 'admin@123gmail.com';
+    const adminHash = '$2b$10$BG659R0o0omnimUvI3rXsOEuzTfD4LO5Olmg4VGe8y6x74KgNI2Lu';
+    const [existingAdmin] = await connection.query('SELECT id FROM users WHERE email = ? LIMIT 1', [adminEmail]);
+    if (existingAdmin.length === 0) {
+        await connection.query(
+            'INSERT INTO users (name, email, password, role, is_active) VALUES (?, ?, ?, ?, ?)',
+            ['System Admin', adminEmail, adminHash, 'admin', 1]
+        );
+        console.log('Default admin user seeded successfully.');
+    } else {
+        console.log('Default admin user already exists. Skipping seeding.');
     }
 
     console.log('Database initialized and tables created successfully!');

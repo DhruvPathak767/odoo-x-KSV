@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
             draw() {
                 ctx.beginPath();
                 ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-                ctx.fillStyle = `rgba(236, 72, 153, ${this.alpha})`;
+                ctx.fillStyle = `rgba(37, 99, 235, ${this.alpha})`;
                 ctx.fill();
             }
 
@@ -79,7 +79,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         ctx.beginPath();
                         ctx.moveTo(p1.x, p1.y);
                         ctx.lineTo(p2.x, p2.y);
-                        ctx.strokeStyle = `rgba(168, 85, 247, ${opacity})`; // Violet connector
+                        ctx.strokeStyle = `rgba(99, 102, 241, ${opacity})`; // Indigo connector
                         ctx.lineWidth = 0.5;
                         ctx.stroke();
                     }
@@ -93,7 +93,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         ctx.beginPath();
                         ctx.moveTo(p1.x, p1.y);
                         ctx.lineTo(mouse.x, mouse.y);
-                        ctx.strokeStyle = `rgba(236, 72, 153, ${opacity})`; // Magenta hover connector
+                        ctx.strokeStyle = `rgba(6, 182, 212, ${opacity})`; // Cyan hover connector
                         ctx.lineWidth = 0.6;
                         ctx.stroke();
                     }

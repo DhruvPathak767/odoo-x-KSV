@@ -1,0 +1,139 @@
+<%- include('../partials/header') %>
+
+<div class="dashboard-hero" style="margin-bottom: 2rem;">
+    <div class="glass-card dashboard-welcome-card" style="padding: 2.5rem 2rem;">
+        <div class="grid-overlay"></div>
+        <div class="badge-wrapper">
+            <span class="badge" style="border-color: rgba(236,72,153,0.25); color: var(--color-primary);">
+                <span class="badge-pulse" style="background-color: var(--color-primary);"></span>
+                Procurement Operations Center Live
+            </span>
+        </div>
+        <h1 style="font-size: 2.5rem; margin-bottom: 0.5rem;">
+            Procurement Console
+        </h1>
+        <p style="color: var(--color-text-secondary); max-width: 600px;">
+            Manage supplier directory, publish specifications, broadcast RFQs, and compare quotes side-by-side.
+        </p>
+        
+        <div style="display: flex; gap: 1rem; margin-top: 1.5rem; flex-wrap: wrap;">
+            <a href="/procurement/vendors" class="btn btn-secondary" style="font-size: 0.85rem; padding: 0.6rem 1.25rem;">
+                Search Supplier Directory
+            </a>
+            <a href="/procurement/rfqs/create" class="btn btn-primary btn-glow" style="font-size: 0.85rem; padding: 0.6rem 1.25rem;">
+                Issue New RFQ Guidelines
+            </a>
+            <a href="/procurement/po" class="btn btn-secondary" style="font-size: 0.85rem; padding: 0.6rem 1.25rem; border-radius: 8px;">
+                Manage Purchase Orders
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Metrics Cards -->
+<div class="metrics-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+    <div class="glass-card" style="padding: 1.75rem 1.5rem; min-height: 140px; display: flex; flex-direction: column; justify-content: space-between;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-text-muted); font-family: 'Outfit'; font-weight: 600;">Approved Suppliers</span>
+            <span class="metric-icon" style="background: rgba(99, 102, 241, 0.15); color: #818cf8; padding: 0.35rem 0.5rem; border-radius: 8px;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+            </span>
+        </div>
+        <div>
+            <div style="font-size: 2.5rem; font-weight: 800; color: #ffffff;"><%= metrics.vendors %></div>
+            <span style="font-size: 0.75rem; color: var(--color-text-muted);">Verified partners onboarded</span>
+        </div>
+    </div>
+
+    <div class="glass-card" style="padding: 1.75rem 1.5rem; min-height: 140px; display: flex; flex-direction: column; justify-content: space-between;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-text-muted); font-family: 'Outfit'; font-weight: 600;">Active RFQs</span>
+            <span class="metric-icon" style="background: rgba(236, 72, 153, 0.15); color: var(--color-primary); padding: 0.35rem 0.5rem; border-radius: 8px;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+            </span>
+        </div>
+        <div>
+            <div style="font-size: 2.5rem; font-weight: 800; color: #ffffff;"><%= metrics.rfqs %></div>
+            <span style="font-size: 0.75rem; color: var(--color-text-muted);">Bidding sheets currently open</span>
+        </div>
+    </div>
+
+    <div class="glass-card" style="padding: 1.75rem 1.5rem; min-height: 140px; display: flex; flex-direction: column; justify-content: space-between;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-text-muted); font-family: 'Outfit'; font-weight: 600;">Pending Approvals</span>
+            <span class="metric-icon" style="background: rgba(168, 85, 247, 0.15); color: #c084fc; padding: 0.35rem 0.5rem; border-radius: 8px;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+            </span>
+        </div>
+        <div>
+            <div style="font-size: 2.5rem; font-weight: 800; color: #ffffff;"><%= metrics.approvals %></div>
+            <span style="font-size: 0.75rem; color: var(--color-warning);">Quotes waiting manager reviews</span>
+        </div>
+    </div>
+
+    <div class="glass-card" style="padding: 1.75rem 1.5rem; min-height: 140px; display: flex; flex-direction: column; justify-content: space-between;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-text-muted); font-family: 'Outfit'; font-weight: 600;">Purchase Orders</span>
+            <span class="metric-icon" style="background: rgba(16, 185, 129, 0.15); color: var(--color-success); padding: 0.35rem 0.5rem; border-radius: 8px;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+            </span>
+        </div>
+        <div>
+            <div style="font-size: 2.5rem; font-weight: 800; color: #ffffff;"><%= metrics.pos %></div>
+            <span style="font-size: 0.75rem; color: var(--color-success);">Issued purchase agreements</span>
+        </div>
+    </div>
+</div>
+
+<!-- Recent RFQs Table -->
+<div class="glass-card" style="padding: 2rem;">
+    <h3 style="font-size: 1.25rem; margin-bottom: 1.25rem; display: flex; align-items: center; gap: 0.5rem;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--color-primary);"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+        Recent RFQs Management List
+    </h3>
+
+    <% if (recentRFQs.length === 0) { %>
+        <p style="color: var(--color-text-muted); text-align: center; padding: 1.5rem 0;">No RFQs published yet. Create one above!</p>
+    <% } else { %>
+        <div style="overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.9rem;">
+                <thead>
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.06); color: var(--color-text-muted);">
+                        <th style="padding: 0.75rem 0.5rem;">Title</th>
+                        <th style="padding: 0.75rem 0.5rem;">Category</th>
+                        <th style="padding: 0.75rem 0.5rem; text-align: right;">Budget</th>
+                        <th style="padding: 0.75rem 0.5rem; text-align: center;">Deadline</th>
+                        <th style="padding: 0.75rem 0.5rem; text-align: center;">Bidders</th>
+                        <th style="padding: 0.75rem 0.5rem; text-align: center;">Status</th>
+                        <th style="padding: 0.75rem 0.5rem; text-align: right;">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% recentRFQs.forEach(rfq => { %>
+                        <tr style="border-bottom: 1px solid rgba(255,255,255,0.03);">
+                            <td style="padding: 0.75rem 0.5rem;">
+                                <strong style="color: #ffffff;"><%= rfq.title %></strong>
+                            </td>
+                            <td style="padding: 0.75rem 0.5rem;"><%= rfq.category %></td>
+                            <td style="padding: 0.75rem 0.5rem; text-align: right; font-family: monospace;">$<%= parseFloat(rfq.budget).toLocaleString() %></td>
+                            <td style="padding: 0.75rem 0.5rem; text-align: center; font-family: monospace;"><%= new Date(rfq.deadline).toLocaleDateString() %></td>
+                            <td style="padding: 0.75rem 0.5rem; text-align: center;">
+                                <span style="background: rgba(255,255,255,0.04); padding: 0.15rem 0.5rem; border-radius: 4px; font-weight: bold;"><%= rfq.vendor_count %></span>
+                            </td>
+                            <td style="padding: 0.75rem 0.5rem; text-align: center;">
+                                <span class="module-status-pill <%= rfq.status === 'Published' ? 'status-active-badge' : 'status-upcoming' %>" style="margin-top: 0; font-size: 0.65rem;">
+                                    <%= rfq.status %>
+                                </span>
+                            </td>
+                            <td style="padding: 0.75rem 0.5rem; text-align: right;">
+                                <a href="/procurement/rfqs/compare/<%= rfq.id %>" class="btn btn-secondary" style="padding: 0.4rem 0.75rem; font-size: 0.75rem; border-radius: 6px;">Compare & Route</a>
+                            </td>
+                        </tr>
+                    <% }) %>
+                </tbody>
+            </table>
+        </div>
+    <% } %>
+</div>
+
+<%- include('../partials/footer') %>

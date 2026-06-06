@@ -1,0 +1,103 @@
+<%- include('../partials/header') %>
+
+<div style="margin-bottom: 2rem;">
+    <h1 style="font-size: 2.2rem; margin-bottom: 0.5rem;">Cost Approvals & Reviews</h1>
+    <p style="color: var(--color-text-secondary);">Evaluate routed quotations and submit final decisions.</p>
+</div>
+
+<!-- Tabs layout (Pending and History) -->
+<div style="display: flex; flex-direction: column; gap: 2rem;">
+    
+    <!-- 1. PENDING REVIEWS -->
+    <div class="glass-card" style="padding: 2rem;">
+        <h3 style="font-size: 1.25rem; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 0.5rem; margin-bottom: 1.25rem; color: var(--color-primary); display: flex; align-items: center; gap: 0.5rem;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+            Pending Bids for Evaluation
+        </h3>
+
+        <% if (pending.length === 0) { %>
+            <p style="color: var(--color-text-muted); text-align: center; padding: 2rem 0;">No pending cost reviews. Good job!</p>
+        <% } else { %>
+            <div style="overflow-x: auto;">
+                <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.95rem;">
+                    <thead>
+                        <tr style="border-bottom: 1px solid rgba(255,255,255,0.08); color: var(--color-text-muted);">
+                            <th style="padding: 0.75rem 0.5rem;">RFQ details</th>
+                            <th style="padding: 0.75rem 0.5rem;">Supplier</th>
+                            <th style="padding: 0.75rem 0.5rem; text-align: right;">RFQ Budget</th>
+                            <th style="padding: 0.75rem 0.5rem; text-align: right;">Proposed Quote</th>
+                            <th style="padding: 0.75rem 0.5rem; text-align: center;">Delivery Days</th>
+                            <th style="padding: 0.75rem 0.5rem; text-align: right;">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% pending.forEach(app => { %>
+                            <tr style="border-bottom: 1px solid rgba(255,255,255,0.03);">
+                                <td style="padding: 1rem 0.5rem;">
+                                    <strong style="color: #ffffff;"><%= app.rfq_title %></strong>
+                                </td>
+                                <td style="padding: 1rem 0.5rem;"><%= app.vendor_name %></td>
+                                <td style="padding: 1rem 0.5rem; text-align: right; font-family: monospace;">$<%= parseFloat(app.rfq_budget).toLocaleString() %></td>
+                                <td style="padding: 1rem 0.5rem; text-align: right; font-family: monospace; color: var(--color-primary); font-weight: bold;">$<%= parseFloat(app.quote_price).toLocaleString() %></td>
+                                <td style="padding: 1rem 0.5rem; text-align: center; font-family: monospace;"><%= app.delivery_days %> days</td>
+                                <td style="padding: 1rem 0.5rem; text-align: right;">
+                                    <a href="/manager/approvals/<%= app.id %>" class="btn btn-secondary" style="padding: 0.45rem 0.85rem; font-size: 0.75rem; border-radius: 8px;">
+                                        Evaluate &rarr;
+                                    </a>
+                                </td>
+                            </tr>
+                        <% }) %>
+                    </tbody>
+                </table>
+            </div>
+        <% } %>
+    </div>
+
+    <!-- 2. AUDIT HISTORY -->
+    <div class="glass-card" style="padding: 2rem;">
+        <h3 style="font-size: 1.25rem; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 0.5rem; margin-bottom: 1.25rem; color: var(--color-primary); display: flex; align-items: center; gap: 0.5rem;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+            Historical Decision Registry
+        </h3>
+
+        <% if (history.length === 0) { %>
+            <p style="color: var(--color-text-muted); text-align: center; padding: 2rem 0;">No resolved audits in history.</p>
+        <% } else { %>
+            <div style="overflow-x: auto;">
+                <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.95rem;">
+                    <thead>
+                        <tr style="border-bottom: 1px solid rgba(255,255,255,0.08); color: var(--color-text-muted);">
+                            <th style="padding: 0.75rem 0.5rem;">RFQ Ref</th>
+                            <th style="padding: 0.75rem 0.5rem;">Supplier Name</th>
+                            <th style="padding: 0.75rem 0.5rem; text-align: right;">Price</th>
+                            <th style="padding: 0.75rem 0.5rem; text-align: center;">Decision Date</th>
+                            <th style="padding: 0.75rem 0.5rem; text-align: center;">Audit Decision</th>
+                            <th style="padding: 0.75rem 0.5rem;">Remarks</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% history.forEach(h => { %>
+                            <tr style="border-bottom: 1px solid rgba(255,255,255,0.03);">
+                                <td style="padding: 1rem 0.5rem;">
+                                    <strong style="color: #ffffff;"><%= h.rfq_title %></strong>
+                                </td>
+                                <td style="padding: 1rem 0.5rem;"><%= h.vendor_name %></td>
+                                <td style="padding: 1rem 0.5rem; text-align: right; font-family: monospace; font-weight: bold;">$<%= parseFloat(h.quote_price).toLocaleString() %></td>
+                                <td style="padding: 1rem 0.5rem; text-align: center; font-family: monospace; font-size: 0.8rem;"><%= new Date(h.updated_at).toLocaleDateString() %></td>
+                                <td style="padding: 1rem 0.5rem; text-align: center;">
+                                    <span class="module-status-pill <%= h.status === 'Approved' ? 'status-active-badge' : 'status-upcoming' %>" style="margin-top: 0; font-size: 0.65rem;">
+                                        <%= h.status %>
+                                    </span>
+                                </td>
+                                <td style="padding: 1rem 0.5rem; font-size: 0.85rem; color: var(--color-text-secondary); max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"><%= h.remarks || 'No comments' %></td>
+                            </tr>
+                        <% }) %>
+                    </tbody>
+                </table>
+            </div>
+        <% } %>
+    </div>
+
+</div>
+
+<%- include('../partials/footer') %>

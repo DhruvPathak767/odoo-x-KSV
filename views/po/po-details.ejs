@@ -1,0 +1,119 @@
+<%- include('../partials/header') %>
+
+<div style="margin-bottom: 2rem;">
+    <a href="<%= role === 'vendor' ? '/vendor/po' : '/procurement/po' %>" style="color: var(--color-text-muted); font-size: 0.85rem;" class="hover-underline">&larr; Back to Purchase Orders</a>
+    <h1 style="font-size: 2.2rem; margin-top: 0.5rem; margin-bottom: 0.25rem;">Purchase Order: <%= po.po_number %></h1>
+    <p style="color: var(--color-text-secondary);">Issued Agreement for RFQ: <strong><%= po.rfq_title %></strong></p>
+</div>
+
+<div style="display: grid; grid-template-columns: 2fr 1fr; gap: 2rem; margin-bottom: 2rem;">
+    <!-- Left Panel: Line Items and Business Details -->
+    <div style="display: flex; flex-direction: column; gap: 2rem;">
+        
+        <!-- Business addresses -->
+        <div class="glass-card" style="padding: 2rem; display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+            <div>
+                <h4 style="font-size: 0.8rem; text-transform: uppercase; color: var(--color-text-muted); margin-bottom: 0.75rem; letter-spacing: 0.05em;">Bill To (Buyer)</h4>
+                <strong style="color: #ffffff; display: block; font-size: 1.05rem; margin-bottom: 0.25rem;">VendorBridge ERP Corp.</strong>
+                <span style="font-size: 0.85rem; color: var(--color-text-secondary); display: block;">100 Innovation Parkway</span>
+                <span style="font-size: 0.85rem; color: var(--color-text-secondary); display: block;">Suite 500, Tech District</span>
+                <span style="font-size: 0.85rem; color: var(--color-text-secondary); display: block;">United States</span>
+                <span style="font-size: 0.85rem; color: var(--color-text-muted); display: block; margin-top: 0.5rem;">Email: billing@vendorbridge.com</span>
+            </div>
+            <div style="border-left: 1px solid rgba(255,255,255,0.06); padding-left: 1.5rem;">
+                <h4 style="font-size: 0.8rem; text-transform: uppercase; color: var(--color-text-muted); margin-bottom: 0.75rem; letter-spacing: 0.05em;">Supplier (Seller)</h4>
+                <strong style="color: #ffffff; display: block; font-size: 1.05rem; margin-bottom: 0.25rem;"><%= po.company_name %></strong>
+                <span style="font-size: 0.85rem; color: var(--color-text-secondary); display: block;"><%= po.address %></span>
+                <span style="font-size: 0.85rem; color: var(--color-text-secondary); display: block;"><%= po.city %>, <%= po.state %></span>
+                <span style="font-size: 0.85rem; color: var(--color-text-secondary); display: block;"><%= po.country %> - <%= po.phone %></span>
+                <span style="font-size: 0.85rem; color: var(--color-primary); font-family: monospace; display: block; margin-top: 0.5rem;">GST: <%= po.gst_number %></span>
+            </div>
+        </div>
+
+        <!-- RFQ Line Items -->
+        <div class="glass-card" style="padding: 2rem;">
+            <h3 style="font-size: 1.2rem; margin-bottom: 1.25rem;">Procured Line Items</h3>
+            <div style="overflow-x: auto;">
+                <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.9rem;">
+                    <thead>
+                        <tr style="border-bottom: 1px solid rgba(255,255,255,0.06); color: var(--color-text-muted);">
+                            <th style="padding: 0.75rem 0.5rem;">Item Description</th>
+                            <th style="padding: 0.75rem 0.5rem; text-align: center;">Quantity</th>
+                            <th style="padding: 0.75rem 0.5rem; text-align: right;">Target Price</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% items.forEach(item => { %>
+                            <tr style="border-bottom: 1px solid rgba(255,255,255,0.03);">
+                                <td style="padding: 0.75rem 0.5rem; font-weight: 500; color: #ffffff;"><%= item.item_name %></td>
+                                <td style="padding: 0.75rem 0.5rem; text-align: center; font-family: monospace;"><%= item.quantity %></td>
+                                <td style="padding: 0.75rem 0.5rem; text-align: right; font-family: monospace;">$<%= parseFloat(item.target_price || 0).toLocaleString() %></td>
+                            </tr>
+                        <% }) %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Right Panel: Financials & Action -->
+    <div style="display: flex; flex-direction: column; gap: 2rem;">
+        
+        <!-- Status & Pricing Details -->
+        <div class="glass-card" style="padding: 2rem;">
+            <h3 style="font-size: 1.25rem; margin-bottom: 1.25rem;">Agreement Terms</h3>
+            
+            <div style="display: flex; flex-direction: column; gap: 1rem; font-size: 0.9rem;">
+                <div style="display: flex; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.04); padding-bottom: 0.5rem;">
+                    <span style="color: var(--color-text-muted);">PO Status</span>
+                    <strong style="color: #ffffff;"><%= po.status %></strong>
+                </div>
+                <div style="display: flex; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.04); padding-bottom: 0.5rem;">
+                    <span style="color: var(--color-text-muted);">Contract Value</span>
+                    <strong style="color: var(--color-primary); font-size: 1.2rem; font-family: monospace;">$<%= parseFloat(po.quote_price).toLocaleString() %></strong>
+                </div>
+                <div style="display: flex; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.04); padding-bottom: 0.5rem;">
+                    <span style="color: var(--color-text-muted);">Delivery Term</span>
+                    <strong style="color: #ffffff; font-family: monospace;"><%= po.delivery_days %> days</strong>
+                </div>
+                <div style="display: flex; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.04); padding-bottom: 0.5rem;">
+                    <span style="color: var(--color-text-muted);">Warranty</span>
+                    <strong style="color: #ffffff; font-family: monospace;"><%= po.warranty_months %> months</strong>
+                </div>
+                <div>
+                    <span style="color: var(--color-text-muted); display: block; margin-bottom: 0.25rem;">Quotation Remarks</span>
+                    <p style="font-size: 0.8rem; color: var(--color-text-secondary); background: rgba(0,0,0,0.2); padding: 0.5rem 0.75rem; border-radius: 8px;">
+                        <%= po.quote_remarks || 'No remarks provided.' %>
+                    </p>
+                </div>
+            </div>
+            
+            <!-- Actions trigger -->
+            <div style="margin-top: 2rem;">
+                <% if (invoice) { %>
+                    <% 
+                    const viewInvoicePath = role === 'vendor' 
+                        ? `/vendor/invoice/${invoice.id}` 
+                        : `/procurement/invoice/${invoice.id}`; 
+                    %>
+                    <a href="<%= viewInvoicePath %>" class="btn btn-primary btn-glow" style="width: 100%; display: block; text-align: center; font-size: 0.85rem; padding: 0.75rem 1rem;">
+                        View Generated Invoice
+                    </a>
+                <% } else { %>
+                    <% 
+                    const actionPath = role === 'vendor' 
+                        ? `/vendor/invoice/generate/${po.id}` 
+                        : `/procurement/invoice/generate/${po.id}`; 
+                    %>
+                    <form action="<%= actionPath %>" method="POST">
+                        <button type="submit" class="btn btn-primary btn-glow" style="width: 100%; font-size: 0.85rem; padding: 0.75rem 1rem;">
+                            Generate Invoice & Bill
+                        </button>
+                    </form>
+                <% } %>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include('../partials/footer') %>

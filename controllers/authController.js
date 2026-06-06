@@ -26,7 +26,7 @@ const getLogin = (req, res) => {
     if (req.cookies.token) {
         return res.redirect('/dashboard');
     }
-    res.render('auth/login', { 
+    res.render('auth/login', {
         title: 'Login | VendorBridge ERP',
         error: req.query.error || null,
         success: req.query.success || null
@@ -37,14 +37,14 @@ const getRegister = (req, res) => {
     if (req.cookies.token) {
         return res.redirect('/dashboard');
     }
-    res.render('auth/register', { 
+    res.render('auth/register', {
         title: 'Register | VendorBridge ERP',
         error: req.query.error || null
     });
 };
 
 const getForgotPassword = (req, res) => {
-    res.render('auth/forgot-password', { 
+    res.render('auth/forgot-password', {
         title: 'Forgot Password | VendorBridge ERP',
         error: req.query.error || null,
         success: req.query.success || null
@@ -120,10 +120,10 @@ const postRegister = async (req, res) => {
             role
         });
 
-        return res.json({ 
-            success: true, 
-            message: 'Registration successful! Redirecting to login...', 
-            redirectUrl: '/auth/login?success=account_created' 
+        return res.json({
+            success: true,
+            message: 'Registration successful! Redirecting to login...',
+            redirectUrl: '/auth/login?success=account_created'
         });
     } catch (err) {
         console.error('Error during registration:', err);
@@ -174,6 +174,10 @@ const postLogin = async (req, res) => {
         // Store JWT in httpOnly cookie
         res.cookie('token', token, cookieOptions);
 
+        // Audit Trail Log
+        const { logActivity } = require('../utils/activityLogger');
+        await logActivity(user.id, 'User Login', 'users', user.id, `User ${user.name} logged in successfully.`);
+
         return res.json({
             success: true,
             message: 'Login successful!',
@@ -197,9 +201,9 @@ const postForgotPassword = async (req, res) => {
         if (!user) {
             // For security, don't disclose that the email does not exist.
             // Respond with success but let them know a reset link will be sent if the email exists.
-            return res.json({ 
-                success: true, 
-                message: 'If the email exists in our records, a reset link will be sent shortly.' 
+            return res.json({
+                success: true,
+                message: 'If the email exists in our records, a reset link will be sent shortly.'
             });
         }
 
@@ -212,7 +216,7 @@ const postForgotPassword = async (req, res) => {
 
         // Send email
         const resetUrl = `${req.protocol}://${req.get('host')}/auth/reset-password?token=${token}`;
-        
+
         console.log(`=========================================`);
         console.log(`PASSWORD RESET REQUEST:`);
         console.log(`User: ${user.name} (${email})`);
@@ -247,9 +251,9 @@ const postForgotPassword = async (req, res) => {
             console.error('SMTP Mail Send Failed. (Reset link printed to console above for debug):', mailErr.message);
         }
 
-        return res.json({ 
-            success: true, 
-            message: 'If the email exists in our records, a reset link will be sent shortly.' 
+        return res.json({
+            success: true,
+            message: 'If the email exists in our records, a reset link will be sent shortly.'
         });
     } catch (err) {
         console.error('Error in forgotPassword:', err);
@@ -285,6 +289,9 @@ const postResetPassword = async (req, res) => {
         // Update database
         await User.updatePassword(user.id, hashedPassword);
 
+        const { logActivity } = require('../utils/activityLogger');
+        await logActivity(user.id, 'Profile Updates', 'users', user.id, `User ${user.name} reset their account password.`);
+
         return res.json({
             success: true,
             message: 'Password reset successful! Redirecting to login...',
@@ -296,7 +303,17 @@ const postResetPassword = async (req, res) => {
     }
 };
 
-const getLogout = (req, res) => {
+const getLogout = async (req, res) => {
+    const token = req.cookies.token;
+    if (token) {
+        try {
+            const jwtToken = jwt.verify(token, process.env.JWT_SECRET);
+            const { logActivity } = require('../utils/activityLogger');
+            await logActivity(jwtToken.id, 'User Logout', 'users', jwtToken.id, `User ${jwtToken.name} logged out.`);
+        } catch (err) {
+            // ignore
+        }
+    }
     res.clearCookie('token');
     res.redirect('/auth/login?success=logged_out');
 };

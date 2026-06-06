@@ -20,10 +20,12 @@
     <!-- Background Particle Canvas -->
     <canvas id="particles-canvas"></canvas>
 
-    <!-- Background Glow Orbs -->
-    <div class="glow-orb glow-orb-1"></div>
-    <div class="glow-orb glow-orb-2"></div>
-    <div class="glow-orb glow-orb-3"></div>
+    <!-- Background Glow Orbs wrapper to prevent scroll overflow -->
+    <div class="glow-orbs-wrapper" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden; pointer-events: none; z-index: 0;">
+        <div class="glow-orb glow-orb-1"></div>
+        <div class="glow-orb glow-orb-2"></div>
+        <div class="glow-orb glow-orb-3"></div>
+    </div>
 
     <!-- HEADER / NAVIGATION -->
     <header class="navbar scrolled" id="navbar">
@@ -50,7 +52,7 @@
     </header>
 
     <!-- MAIN LOGIN SECTION -->
-    <main class="auth-section">
+    <main class="auth-section" style="flex: 1 0 auto;">
         <div class="auth-container">
             <div class="glass-card auth-card">
                 <div class="grid-overlay"></div>
@@ -111,9 +113,20 @@
                 <p class="auth-nav-tip">
                     New to VendorBridge? <a href="/auth/register">Create an account</a>
                 </p>
+                <p class="auth-nav-tip" style="margin-top: 0.5rem; font-size: 0.85rem;">
+                    Are you a supplier? <a href="/vendor/register" style="color: var(--color-accent);">Register as a Vendor</a>
+                </p>
             </div>
         </div>
     </main>
+
+    <!-- FOOTER -->
+    <footer class="footer" style="position: relative; z-index: 10; padding: 2rem 0;">
+        <div class="container footer-bottom" style="border-top: none; padding-top: 0; display: flex; justify-content: space-between; align-items: center;">
+            <p>&copy; <%= new Date().getFullYear() %> VendorBridge Inc. All rights reserved.</p>
+            <p>Procurement Management System v1.2</p>
+        </div>
+    </footer>
 
     <!-- Main JavaScript Files -->
     <script src="/script.js"></script>

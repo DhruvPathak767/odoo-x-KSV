@@ -1,0 +1,99 @@
+<%- include('../partials/header') %>
+
+<div style="margin-bottom: 2rem;">
+    <h1 style="font-size: 2.2rem; margin-bottom: 0.5rem;">Company Profile</h1>
+    <p style="color: var(--color-text-secondary);">Manage your supplier organization profile and contact settings.</p>
+</div>
+
+<div class="glass-card" style="padding: 2.5rem; max-width: 800px;">
+    <!-- Alert Feedback -->
+    <% if (error) { %>
+        <div class="alert-banner alert-banner-error" style="margin-bottom: 1.5rem;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+            <span><%= error %></span>
+        </div>
+    <% } %>
+    <% if (success) { %>
+        <div class="alert-banner alert-banner-success" style="margin-bottom: 1.5rem;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+            <span><%= success %></span>
+        </div>
+    <% } %>
+
+    <form class="auth-form" method="POST" action="/vendor/profile">
+        <h3 style="font-size: 1.1rem; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 0.5rem; color: var(--color-primary); margin-bottom: 1rem;">Supplier Identity</h3>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1rem;">
+            <div class="form-group">
+                <label for="company_name" class="form-label">Registered Company Name *</label>
+                <input type="text" id="company_name" name="company_name" class="form-control" value="<%= vendor.company_name %>" required>
+            </div>
+            <div class="form-group">
+                <label for="gst_number" class="form-label">GST / Tax Identification Number</label>
+                <input type="text" id="gst_number" class="form-control" value="<%= vendor.gst_number %>" disabled style="opacity: 0.6; cursor: not-allowed;">
+                <span style="font-size: 0.75rem; color: var(--color-text-muted);">GST verification is locked after registration.</span>
+            </div>
+            <div class="form-group">
+                <label for="category" class="form-label">Industry Category *</label>
+                <select id="category" name="category" class="form-control" required>
+                    <option value="IT Solutions" <%= vendor.category === 'IT Solutions' ? 'selected' : '' %>>IT Solutions & Hardware</option>
+                    <option value="Raw Materials" <%= vendor.category === 'Raw Materials' ? 'selected' : '' %>>Raw Materials</option>
+                    <option value="Chemicals" <%= vendor.category === 'Chemicals' ? 'selected' : '' %>>Industrial Chemicals</option>
+                    <option value="Logistics" <%= vendor.category === 'Logistics' ? 'selected' : '' %>>Logistics & Freight</option>
+                    <option value="Office Logistics" <%= vendor.category === 'Office Logistics' ? 'selected' : '' %>>Office supplies & Logistics</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="website" class="form-label">Corporate Website</label>
+                <input type="url" id="website" name="website" class="form-control" value="<%= vendor.website %>">
+            </div>
+        </div>
+
+        <h3 style="font-size: 1.1rem; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 0.5rem; color: var(--color-primary); margin-top: 1.5rem; margin-bottom: 1rem;">Primary Point of Contact</h3>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1rem;">
+            <div class="form-group">
+                <label for="contact_person" class="form-label">Contact Officer Name *</label>
+                <input type="text" id="contact_person" name="contact_person" class="form-control" value="<%= vendor.contact_person %>" required>
+            </div>
+            <div class="form-group">
+                <label for="phone" class="form-label">Contact Phone Number *</label>
+                <input type="tel" id="phone" name="phone" class="form-control" value="<%= vendor.phone %>" required>
+            </div>
+        </div>
+
+        <h3 style="font-size: 1.1rem; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 0.5rem; color: var(--color-primary); margin-top: 1.5rem; margin-bottom: 1rem;">Corporate Address Coordinates</h3>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1rem;">
+            <div class="form-group" style="grid-column: span 2;">
+                <label for="address" class="form-label">Office Address *</label>
+                <input type="text" id="address" name="address" class="form-control" value="<%= vendor.address %>" required>
+            </div>
+            <div class="form-group">
+                <label for="city" class="form-label">City *</label>
+                <input type="text" id="city" name="city" class="form-control" value="<%= vendor.city %>" required>
+            </div>
+            <div class="form-group">
+                <label for="state" class="form-label">State / Province *</label>
+                <input type="text" id="state" name="state" class="form-control" value="<%= vendor.state %>" required>
+            </div>
+            <div class="form-group">
+                <label for="country" class="form-label">Country *</label>
+                <input type="text" id="country" name="country" class="form-control" value="<%= vendor.country %>" required>
+            </div>
+            <div class="form-group">
+                <label for="postal_code" class="form-label">Postal / Zip Code</label>
+                <input type="text" id="postal_code" name="postal_code" class="form-control" value="<%= vendor.postal_code %>">
+            </div>
+        </div>
+
+        <div class="form-group" style="margin-top: 1rem; margin-bottom: 1.5rem;">
+            <label for="description" class="form-label">Corporate Description / Offerings</label>
+            <textarea id="description" name="description" class="form-control" rows="3"><%= vendor.description %></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-glow" style="width: 200px; padding: 0.85rem;">
+            <span>Save Profile Settings</span>
+        </button>
+    </form>
+</div>
+
+<%- include('../partials/header') %>

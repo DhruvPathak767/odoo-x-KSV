@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        <%= title %>
+    </title>
+    <meta name="description" content="Onboard as a supplier in the VendorBridge ERP.">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <!-- Main Stylesheet -->
+    <link rel="stylesheet" href="/style.css">
+    <style>
+        .register-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .register-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Premium Noise & Spotlight overlays -->
+    <div class="noise-overlay"></div>
+    <div class="global-spotlight"></div>
+
+    <!-- Background Particle Canvas -->
+    <canvas id="particles-canvas"></canvas>
+
+    <!-- Background Glow Orbs wrapper to prevent scroll overflow -->
+    <div class="glow-orbs-wrapper"
+        style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden; pointer-events: none; z-index: 0;">
+        <div class="glow-orb glow-orb-1"></div>
+        <div class="glow-orb glow-orb-2"></div>
+        <div class="glow-orb glow-orb-3"></div>
+    </div>
+
+    <!-- HEADER / NAVIGATION -->
+    <header class="navbar scrolled" id="navbar">
+        <div class="nav-container">
+            <a href="/" class="logo-group" id="nav-logo">
+                <svg class="logo-icon" width="36" height="36" viewBox="0 0 100 100" fill="none"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="logo-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#ec4899" />
+                            <stop offset="100%" stop-color="#6366f1" />
+                        </linearGradient>
+                    </defs>
+                    <path d="M20 70 L40 30 L60 30 L80 70" stroke="url(#logo-grad)" stroke-width="10"
+                        stroke-linecap="round" stroke-linejoin="round" />
+                    <path d="M30 55 L70 55" stroke="#ec4899" stroke-width="8" stroke-linecap="round" />
+                    <circle cx="50" cy="30" r="8" fill="#ec4899" class="logo-dot" />
+                </svg>
+                <span class="logo-text">Vendor<span>Bridge</span></span>
+            </a>
+            <div class="nav-actions">
+                <a href="/auth/login" class="btn btn-secondary btn-nav">Back to Sign In</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN VENDOR REGISTER SECTION -->
+    <main class="auth-section" style="padding-top: calc(var(--navbar-height) + 4rem); flex: 1 0 auto;">
+        <div class="auth-container" style="max-width: 780px;">
+            <div class="glass-card auth-card" style="padding: 3rem 2.5rem;">
+                <div class="grid-overlay"></div>
+                <div class="auth-header">
+                    <h2>Supplier Registration</h2>
+                    <p>Apply to onboard as a verified vendor in the VendorBridge network</p>
+                </div>
+
+                <!-- Alert Banners -->
+                <div id="alert-container"></div>
+
+                <form class="auth-form" id="vendor-register-form" method="POST" action="/vendor/register">
+                    <h3
+                        style="font-size: 1.1rem; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 0.5rem; color: var(--color-primary);">
+                        Company Information</h3>
+                    <div class="register-grid">
+                        <div class="form-group">
+                            <label for="company_name" class="form-label">Registered Company Name *</label>
+                            <input type="text" id="company_name" name="company_name" class="form-control"
+                                placeholder="Apex Global Technologies Ltd" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="gst_number" class="form-label">GST / Tax Number *</label>
+                            <input type="text" id="gst_number" name="gst_number" class="form-control"
+                                placeholder="27AAAAA1111A1Z1" required minlength="15" maxlength="15">
+                        </div>
+                        <div class="form-group">
+                            <label for="category" class="form-label">Business Category *</label>
+                            <select id="category" name="category" class="form-control" required>
+                                <option value="" disabled selected>Select category</option>
+                                <option value="IT Solutions">IT Solutions & Hardware</option>
+                                <option value="Raw Materials">Raw Materials</option>
+                                <option value="Chemicals">Industrial Chemicals</option>
+                                <option value="Logistics">Logistics & Freight</option>
+                                <option value="Office Logistics">Office supplies & Logistics</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="website" class="form-label">Company Website</label>
+                            <input type="url" id="website" name="website" class="form-control"
+                                placeholder="https://apexglobal.com">
+                        </div>
+                    </div>
+
+                    <h3
+                        style="font-size: 1.1rem; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 0.5rem; margin-top: 1.5rem; color: var(--color-primary);">
+                        Contact & Login Credentials</h3>
+                    <div class="register-grid">
+                        <div class="form-group">
+                            <label for="contact_person" class="form-label">Contact Person Name *</label>
+                            <input type="text" id="contact_person" name="contact_person" class="form-control"
+                                placeholder="John Doe" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone" class="form-label">Contact Phone Number *</label>
+                            <input type="tel" id="phone" name="phone" class="form-control" placeholder="+1234567890"
+                                required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email" class="form-label">Business Email Address *</label>
+                            <input type="email" id="email" name="email" class="form-control"
+                                placeholder="procurement@company.com" required>
+                        </div>
+                        <div class="form-group">
+                            <!-- Empty spacer for desktop layout balance -->
+                        </div>
+                        <div class="form-group">
+                            <label for="password" class="form-label">Password * (Min 8 chars)</label>
+                            <input type="password" id="password" name="password" class="form-control"
+                                placeholder="••••••••" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="confirmPassword" class="form-label">Confirm Password *</label>
+                            <input type="password" id="confirmPassword" name="confirmPassword" class="form-control"
+                                placeholder="••••••••" required>
+                        </div>
+                    </div>
+
+                    <h3
+                        style="font-size: 1.1rem; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 0.5rem; margin-top: 1.5rem; color: var(--color-primary);">
+                        Business Address</h3>
+                    <div class="register-grid">
+                        <div class="form-group" style="grid-column: span 2;">
+                            <label for="address" class="form-label">Office / Warehouse Address *</label>
+                            <input type="text" id="address" name="address" class="form-control"
+                                placeholder="Suite 400, Innovation Drive" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="city" class="form-label">City *</label>
+                            <input type="text" id="city" name="city" class="form-control" placeholder="San Francisco"
+                                required>
+                        </div>
+                        <div class="form-group">
+                            <label for="state" class="form-label">State / Province *</label>
+                            <input type="text" id="state" name="state" class="form-control" placeholder="California"
+                                required>
+                        </div>
+                        <div class="form-group">
+                            <label for="country" class="form-label">Country *</label>
+                            <input type="text" id="country" name="country" class="form-control"
+                                placeholder="United States" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="postal_code" class="form-label">Postal / Zip Code</label>
+                            <input type="text" id="postal_code" name="postal_code" class="form-control"
+                                placeholder="94107">
+                        </div>
+                    </div>
+
+                    <div class="form-group" style="margin-top: 1rem;">
+                        <label for="description" class="form-label">Brief Description of Services / Products</label>
+                        <textarea id="description" name="description" class="form-control" rows="3"
+                            placeholder="Describe your service catalog..."></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-glow btn-auth-submit" id="btn-submit"
+                        style="margin-top: 1.5rem;">
+                        <span>Submit Application</span>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="footer" style="position: relative; z-index: 10; padding: 2rem 0;">
+        <div class="container footer-bottom"
+            style="border-top: none; padding-top: 0; display: flex; justify-content: space-between; align-items: center;">
+            <p>&copy; <%= new Date().getFullYear() %> VendorBridge Inc. All rights reserved.</p>
+            <p>Procurement Management System v1.2</p>
+        </div>
+    </footer>
+
+    <!-- Main JavaScript Files -->
+    <script src="/script.js"></script>
+    <script src="/js/auth.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,185 @@
+<%- include('../partials/header') %>
+
+<style>
+    /* Styling overrides for standard browser printing */
+    @media print {
+        /* Hide navbar, noise, glow orbs, and action buttons */
+        body {
+            background: #ffffff !important;
+            color: #000000 !important;
+        }
+        .navbar, .noise-overlay, .global-spotlight, .glow-orbs-wrapper, #particles-canvas, .no-print, .footer, .btn, .auth-nav-tip {
+            display: none !important;
+            visibility: hidden !important;
+        }
+        /* Make printable invoice occupy full viewport */
+        .container {
+            padding-top: 0 !important;
+            padding-bottom: 0 !important;
+            margin: 0 !important;
+            width: 100% !important;
+            max-width: 100% !important;
+            min-height: 0 !important;
+            box-shadow: none !important;
+        }
+        #invoice-printable {
+            background: #ffffff !important;
+            color: #000000 !important;
+            border: none !important;
+            box-shadow: none !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            width: 100% !important;
+        }
+        #invoice-printable h1, #invoice-printable h2, #invoice-printable h3, #invoice-printable h4, 
+        #invoice-printable p, #invoice-printable span, #invoice-printable td, #invoice-printable th, #invoice-printable strong {
+            color: #000000 !important;
+        }
+        #invoice-printable table {
+            width: 100% !important;
+            border-collapse: collapse !important;
+        }
+        #invoice-printable th {
+            background-color: #f1f5f9 !important;
+            border-bottom: 2px solid #94a3b8 !important;
+            color: #000000 !important;
+            padding: 8px !important;
+        }
+        #invoice-printable td {
+            border-bottom: 1px solid #e2e8f0 !important;
+            color: #000000 !important;
+            padding: 8px !important;
+        }
+        #invoice-divider {
+            border-color: #e2e8f0 !important;
+        }
+        #invoice-terms-card {
+            background-color: #f8fafc !important;
+            border-color: #e2e8f0 !important;
+        }
+    }
+</style>
+
+<div style="margin-bottom: 2rem;" class="no-print">
+    <a href="<%= role === 'vendor' ? '/vendor/po' : '/procurement/po' %>" style="color: var(--color-text-muted); font-size: 0.85rem;" class="hover-underline">&larr; Back to Purchase Orders</a>
+    <h1 style="font-size: 2.2rem; margin-top: 0.5rem; margin-bottom: 0.25rem;">Procurement Invoice</h1>
+    <p style="color: var(--color-text-secondary);">Manage payment dispatch, print/save PDF records, or share copies via email.</p>
+</div>
+
+<!-- Success Banner for Emails -->
+<% if (success) { %>
+    <div class="alert-banner alert-banner-success no-print" style="margin-bottom: 1.5rem;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+        <span>Invoice copy successfully dispatched to supplier email!</span>
+    </div>
+<% } %>
+
+<!-- Print wrapper -->
+<div class="glass-card" id="invoice-printable" style="padding: 3rem 2.5rem; margin-bottom: 2rem;">
+    <div class="grid-overlay no-print"></div>
+    
+    <!-- Invoice Header info -->
+    <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1.5rem; margin-bottom: 2.5rem;">
+        <div>
+            <span style="font-size: 0.8rem; text-transform: uppercase; color: var(--color-primary); letter-spacing: 0.05em; font-weight: bold; display: block; margin-bottom: 0.25rem;">Invoice Statement</span>
+            <h2 style="font-size: 1.8rem; font-family: 'Outfit'; color: #ffffff;"><%= invoice.invoice_number %></h2>
+            <span style="font-size: 0.85rem; color: var(--color-text-muted);">Related Purchase Order: <strong><%= invoice.po_number %></strong></span>
+        </div>
+        <div style="text-align: right;">
+            <strong style="font-size: 1.3rem; color: #ffffff; display: block; font-family: 'Outfit';">VendorBridge ERP</strong>
+            <span style="font-size: 0.85rem; color: var(--color-text-secondary); display: block;">Date: <%= new Date(invoice.created_at).toLocaleDateString() %></span>
+            <span style="font-size: 0.85rem; color: var(--color-text-secondary); display: block;">Status: <strong style="color: var(--color-warning);"><%= invoice.status %></strong></span>
+        </div>
+    </div>
+
+    <!-- Divider -->
+    <hr id="invoice-divider" style="border: 0; border-top: 1px solid rgba(255,255,255,0.06); margin-bottom: 2rem;">
+
+    <!-- Addresses -->
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 2.5rem; font-size: 0.9rem;">
+        <div>
+            <h4 style="font-size: 0.75rem; text-transform: uppercase; color: var(--color-text-muted); margin-bottom: 0.75rem; letter-spacing: 0.05em;">Billed To (Buyer)</h4>
+            <strong style="color: #ffffff; display: block; font-size: 1rem; margin-bottom: 0.2rem;">VendorBridge ERP Corp.</strong>
+            <span style="color: var(--color-text-secondary); display: block;">100 Innovation Parkway</span>
+            <span style="color: var(--color-text-secondary); display: block;">Suite 500, Tech District</span>
+            <span style="color: var(--color-text-secondary); display: block;">United States</span>
+        </div>
+        <div>
+            <h4 style="font-size: 0.75rem; text-transform: uppercase; color: var(--color-text-muted); margin-bottom: 0.75rem; letter-spacing: 0.05em;">Supplier (Seller)</h4>
+            <strong style="color: #ffffff; display: block; font-size: 1rem; margin-bottom: 0.2rem;"><%= invoice.company_name %></strong>
+            <span style="color: var(--color-text-secondary); display: block;"><%= invoice.address %></span>
+            <span style="color: var(--color-text-secondary); display: block;"><%= invoice.city %>, <%= invoice.state %></span>
+            <span style="color: var(--color-text-secondary); display: block;"><%= invoice.country %></span>
+            <span style="color: var(--color-primary); font-family: monospace; display: block; margin-top: 0.25rem;">GST: <%= invoice.gst_number %></span>
+        </div>
+    </div>
+
+    <!-- Items Table -->
+    <h3 style="font-size: 1.15rem; margin-bottom: 1rem; color: #ffffff;">Procured Items List</h3>
+    <div style="overflow-x: auto; margin-bottom: 2.5rem;">
+        <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.9rem;">
+            <thead>
+                <tr style="border-bottom: 2px solid rgba(255,255,255,0.06); color: var(--color-text-muted);">
+                    <th style="padding: 0.75rem 0.5rem;">Item Description</th>
+                    <th style="padding: 0.75rem 0.5rem; text-align: center;">Quantity</th>
+                    <th style="padding: 0.75rem 0.5rem; text-align: right;">Base Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% items.forEach(item => { %>
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.03);">
+                        <td style="padding: 0.75rem 0.5rem; font-weight: 500; color: #ffffff;"><%= item.item_name %></td>
+                        <td style="padding: 0.75rem 0.5rem; text-align: center; font-family: monospace;"><%= item.quantity %></td>
+                        <td style="padding: 0.75rem 0.5rem; text-align: right; font-family: monospace;">$<%= parseFloat(item.target_price || 0).toLocaleString() %></td>
+                    </tr>
+                <% }) %>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Financial calculations sheet -->
+    <div style="display: flex; justify-content: flex-end;">
+        <div id="invoice-terms-card" style="width: 100%; max-width: 320px; background: rgba(255,255,255,0.01); border: 1px solid rgba(255,255,255,0.04); padding: 1.5rem; border-radius: 12px;">
+            <table style="width: 100%; font-size: 0.9rem; border-collapse: collapse;">
+                <tr>
+                    <td style="padding: 0.5rem 0; color: var(--color-text-muted);">Quoted Subtotal:</td>
+                    <td style="padding: 0.5rem 0; text-align: right; font-family: monospace; color: #ffffff;">$<%= parseFloat(invoice.subtotal).toLocaleString(undefined, {minimumFractionDigits: 2}) %></td>
+                </tr>
+                <tr>
+                    <td style="padding: 0.5rem 0; color: var(--color-text-muted);">GST / Tax (18.00%):</td>
+                    <td style="padding: 0.5rem 0; text-align: right; font-family: monospace; color: #ffffff;">$<%= parseFloat(invoice.tax_amount).toLocaleString(undefined, {minimumFractionDigits: 2}) %></td>
+                </tr>
+                <tr style="border-top: 1px solid rgba(255,255,255,0.08);">
+                    <td style="padding: 0.75rem 0 0 0; font-weight: bold; color: var(--color-primary);">Grand Total:</td>
+                    <td style="padding: 0.75rem 0 0 0; font-weight: bold; text-align: right; font-family: monospace; color: var(--color-primary); font-size: 1.15rem;">$<%= parseFloat(invoice.total_amount).toLocaleString(undefined, {minimumFractionDigits: 2}) %></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Actions Footer -->
+<div class="glass-card no-print" style="padding: 1.5rem 2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+    <div style="font-size: 0.85rem; color: var(--color-text-secondary);">
+        Need a physical or PDF copy? Choose <strong>Print Invoice</strong> and select "Save as PDF".
+    </div>
+    
+    <div style="display: flex; gap: 0.75rem; align-items: center;">
+        <button class="btn btn-secondary" onclick="window.print()" style="font-size: 0.85rem; padding: 0.5rem 1rem;">
+            Print Invoice
+        </button>
+
+        <% 
+        const emailActionPath = role === 'vendor'
+            ? `/vendor/invoice/send/${invoice.id}`
+            : `/procurement/invoice/send/${invoice.id}`;
+        %>
+        <form action="<%= emailActionPath %>" method="POST" style="display: inline;">
+            <button type="submit" class="btn btn-primary btn-glow" style="font-size: 0.85rem; padding: 0.5rem 1rem;">
+                Send via Email
+            </button>
+        </form>
+    </div>
+</div>
+
+<%- include('../partials/footer') %>
