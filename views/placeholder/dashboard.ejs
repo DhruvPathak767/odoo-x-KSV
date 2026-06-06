@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | VendorBridge ERP</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- Main Stylesheet -->
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <!-- Premium Noise & Spotlight overlays -->
+    <div class="noise-overlay"></div>
+    <div class="global-spotlight"></div>
+
+    <!-- Background Particle Canvas -->
+    <canvas id="particles-canvas"></canvas>
+
+    <!-- Background Glow Orbs -->
+    <div class="glow-orb glow-orb-1"></div>
+    <div class="glow-orb glow-orb-2"></div>
+    <div class="glow-orb glow-orb-3"></div>
+
+    <!-- HEADER / NAVIGATION -->
+    <header class="navbar scrolled" id="navbar">
+        <div class="nav-container">
+            <a href="/dashboard" class="logo-group" id="nav-logo">
+                <svg class="logo-icon" width="36" height="36" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="logo-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#ec4899" />
+                            <stop offset="100%" stop-color="#6366f1" />
+                        </linearGradient>
+                    </defs>
+                    <path d="M20 70 L40 30 L60 30 L80 70" stroke="url(#logo-grad)" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M30 55 L70 55" stroke="#ec4899" stroke-width="8" stroke-linecap="round"/>
+                    <circle cx="50" cy="30" r="8" fill="#ec4899" class="logo-dot" />
+                </svg>
+                <span class="logo-text">Vendor<span>Bridge</span></span>
+            </a>
+
+            <div class="nav-actions">
+                <span style="font-size: 0.9rem; color: var(--color-text-secondary); margin-right: 1rem;" class="desktop-only">
+                    Signed in as <strong><%= user.name %></strong> (<%= user.role.toUpperCase().replace('_', ' ') %>)
+                </span>
+                <a href="/auth/logout" class="btn btn-secondary btn-nav">Sign Out</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- DASHBOARD VIEWPORT -->
+    <main class="container dashboard-container">
+        <div class="dashboard-hero">
+            <div class="glass-card dashboard-welcome-card reveal-fade-up active">
+                <div class="grid-overlay"></div>
+                <div class="badge-wrapper">
+                    <span class="badge welcome-role-badge">
+                        <span class="badge-pulse"></span>
+                        Secure Session Active
+                    </span>
+                </div>
+                <h1 style="font-size: 3rem; margin-bottom: 0.75rem;">
+                    Hello, <span class="gradient-text"><%= user.name %></span>
+                </h1>
+                <p style="color: var(--color-text-secondary); font-size: 1.15rem; max-width: 600px; margin-bottom: 2rem;">
+                    Welcome to your VendorBridge ERP workspace. Your account has been authenticated with the role of <strong><%= user.role.toUpperCase().replace('_', ' ') %></strong>.
+                </p>
+
+                <div style="display: flex; gap: 1.5rem; flex-wrap: wrap;">
+                    <div style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); padding: 1rem 1.5rem; border-radius: 12px; backdrop-filter: blur(8px);">
+                        <span style="font-size: 0.75rem; color: var(--color-text-muted); display: block; text-transform: uppercase;">Email Address</span>
+                        <span style="font-size: 0.95rem; font-weight: 600; color: #ffffff;"><%= user.email %></span>
+                    </div>
+                    <div style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); padding: 1rem 1.5rem; border-radius: 12px; backdrop-filter: blur(8px);">
+                        <span style="font-size: 0.75rem; color: var(--color-text-muted); display: block; text-transform: uppercase;">Session ID</span>
+                        <span style="font-size: 0.95rem; font-weight: 600; color: #ffffff; font-family: monospace;">vb_jwt_<%= user.id %>_active</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h2 style="font-size: 2rem; margin-top: 4rem; margin-bottom: 1.5rem;" class="reveal-fade-up active">VendorBridge ERP Modules</h2>
+        <p style="color: var(--color-text-secondary); max-width: 700px; margin-bottom: 2rem;" class="reveal-fade-up active">
+            The VendorBridge platform operates on a decentralized, modular framework. Below is the current implementation status of each system component.
+        </p>
+
+        <div class="dashboard-modules-grid">
+            <!-- Module 1: Auth (Completed) -->
+            <div class="glass-card module-card active-module reveal-fade-up active">
+                <div class="feature-icon cyan-icon-glow">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                </div>
+                <h3>Module 1: Authentication</h3>
+                <p style="font-size: 0.9rem; color: var(--color-text-secondary); margin-top: 0.5rem;">
+                    Secure login, registration, role checks, session cookie storage, and password reset flows.
+                </p>
+                <span class="module-status-pill status-active-badge">Active & Certified</span>
+            </div>
+
+            <!-- Module 2: Vendor Management (Upcoming) -->
+            <div class="glass-card module-card reveal-fade-up active">
+                <div class="feature-icon purple-icon-glow">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg>
+                </div>
+                <h3>Module 2: Vendor Management</h3>
+                <p style="font-size: 0.9rem; color: var(--color-text-secondary); margin-top: 0.5rem;">
+                    Vendor onboarding database, compliance scores, registration portals, and performance scorecards.
+                </p>
+                <span class="module-status-pill status-upcoming">Upcoming Phase</span>
+            </div>
+
+            <!-- Module 3: RFQ & Quotation Management (Upcoming) -->
+            <div class="glass-card module-card reveal-fade-up active">
+                <div class="feature-icon green-icon-glow">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+                </div>
+                <h3>Module 3: RFQ & Bid comparison</h3>
+                <p style="font-size: 0.9rem; color: var(--color-text-secondary); margin-top: 0.5rem;">
+                    Procurement requirement sheets, bid dispatches, side-by-side matrices, and automated L1 flags.
+                </p>
+                <span class="module-status-pill status-upcoming">Upcoming Phase</span>
+            </div>
+
+            <!-- Module 4: Purchase Orders & Invoicing (Upcoming) -->
+            <div class="glass-card module-card reveal-fade-up active">
+                <div class="feature-icon blue-icon-glow">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon></svg>
+                </div>
+                <h3>Module 4: Orders & Invoices</h3>
+                <p style="font-size: 0.9rem; color: var(--color-text-secondary); margin-top: 0.5rem;">
+                    PO dispatch integrations, goods-received matchings, ledger transactions, and automated matches.
+                </p>
+                <span class="module-status-pill status-upcoming">Upcoming Phase</span>
+            </div>
+        </div>
+    </main>
+
+    <!-- Main JavaScript Files -->
+    <script src="/script.js"></script>
+</body>
+</html>

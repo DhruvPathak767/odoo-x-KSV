@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <meta name="description" content="Create a new VendorBridge ERP account.">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- Main Stylesheet -->
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <!-- Premium Noise & Spotlight overlays -->
+    <div class="noise-overlay"></div>
+    <div class="global-spotlight"></div>
+
+    <!-- Background Particle Canvas -->
+    <canvas id="particles-canvas"></canvas>
+
+    <!-- Background Glow Orbs -->
+    <div class="glow-orb glow-orb-1"></div>
+    <div class="glow-orb glow-orb-2"></div>
+    <div class="glow-orb glow-orb-3"></div>
+
+    <!-- HEADER / NAVIGATION -->
+    <header class="navbar scrolled" id="navbar">
+        <div class="nav-container">
+            <a href="/" class="logo-group" id="nav-logo">
+                <svg class="logo-icon" width="36" height="36" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="logo-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#ec4899" />
+                            <stop offset="100%" stop-color="#6366f1" />
+                        </linearGradient>
+                    </defs>
+                    <path d="M20 70 L40 30 L60 30 L80 70" stroke="url(#logo-grad)" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M30 55 L70 55" stroke="#ec4899" stroke-width="8" stroke-linecap="round"/>
+                    <circle cx="50" cy="30" r="8" fill="#ec4899" class="logo-dot" />
+                </svg>
+                <span class="logo-text">Vendor<span>Bridge</span></span>
+            </a>
+
+            <div class="nav-actions">
+                <a href="/" class="btn btn-secondary btn-nav">Back to Home</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN REGISTER SECTION -->
+    <main class="auth-section">
+        <div class="auth-container">
+            <div class="glass-card auth-card">
+                <div class="grid-overlay"></div>
+                <div class="auth-header">
+                    <h2>Get Started</h2>
+                    <p>Create your VendorBridge ERP workspace account</p>
+                </div>
+
+                <!-- Alert Banners for server/client feedback -->
+                <div id="alert-container">
+                    <% if (error) { %>
+                        <div class="alert-banner alert-banner-error">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                            <span><%= error %></span>
+                        </div>
+                    <% } %>
+                </div>
+
+                <form class="auth-form" id="register-form" method="POST" action="/auth/register">
+                    <div class="form-group">
+                        <label for="name" class="form-label">Full Name</label>
+                        <div class="form-control-wrapper">
+                            <input type="text" id="name" name="name" class="form-control" placeholder="John Doe" required autocomplete="name">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email" class="form-label">Business Email</label>
+                        <div class="form-control-wrapper">
+                            <input type="email" id="email" name="email" class="form-control" placeholder="name@company.com" required autocomplete="email">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="role" class="form-label">ERP System Role</label>
+                        <div class="form-control-wrapper">
+                            <select id="role" name="role" class="form-control" required>
+                                <option value="" disabled selected>Select your account role</option>
+                                <option value="admin">Administrator (System Owner)</option>
+                                <option value="procurement_officer">Procurement Officer (Buyer)</option>
+                                <option value="manager">Approving Manager (Cost Center Head)</option>
+                                <option value="vendor">External Vendor (Supplier)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password" class="form-label">Password</label>
+                        <div class="form-control-wrapper">
+                            <input type="password" id="password" name="password" class="form-control" placeholder="At least 8 characters" required autocomplete="new-password">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="confirmPassword" class="form-label">Confirm Password</label>
+                        <div class="form-control-wrapper">
+                            <input type="password" id="confirmPassword" name="confirmPassword" class="form-control" placeholder="Re-enter password" required autocomplete="new-password">
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-glow btn-auth-submit" id="btn-submit">
+                        <span>Create Account</span>
+                    </button>
+                </form>
+
+                <p class="auth-nav-tip">
+                    Already have an account? <a href="/auth/login">Sign in</a>
+                </p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Main JavaScript Files -->
+    <script src="/script.js"></script>
+    <script src="/js/auth.js"></script>
+</body>
+</html>

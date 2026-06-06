@@ -51,7 +51,12 @@
             </nav>
 
             <div class="nav-actions">
-                <a href="#contact" class="btn btn-primary btn-nav">Request Demo</a>
+                <% if (user) { %>
+                    <a href="/dashboard" class="btn btn-primary btn-nav">Dashboard</a>
+                <% } else { %>
+                    <a href="/auth/login" class="btn btn-secondary btn-nav">Sign In</a>
+                    <a href="#contact" class="btn btn-primary btn-nav">Request Demo</a>
+                <% } %>
                 <button class="mobile-toggle" id="mobile-toggle" aria-label="Toggle Navigation">
                     <span class="bar"></span>
                     <span class="bar"></span>
@@ -68,7 +73,13 @@
             <a href="#workflow" class="mobile-nav-link">Workflow</a>
             <a href="#benefits" class="mobile-nav-link">Benefits</a>
             <a href="#contact" class="mobile-nav-link">Contact</a>
-            <a href="#contact" class="btn btn-primary btn-mobile-nav">Request Demo</a>
+            <% if (user) { %>
+                <a href="/dashboard" class="btn btn-primary btn-mobile-nav">Dashboard</a>
+                <a href="/auth/logout" class="btn btn-secondary btn-mobile-nav">Sign Out</a>
+            <% } else { %>
+                <a href="/auth/login" class="btn btn-secondary btn-mobile-nav">Sign In</a>
+                <a href="#contact" class="btn btn-primary btn-mobile-nav">Request Demo</a>
+            <% } %>
         </nav>
     </div>
 
